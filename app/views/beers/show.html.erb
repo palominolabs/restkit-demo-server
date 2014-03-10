@@ -10,5 +10,11 @@
   <%= @beer.brewery %>
 </p>
 
+<p>
+    <strong>Reviews:</strong>
+    <strong>Add a Review:</strong>
+    <%= render 'reviews/form' %>
+</p>
+
 <%= link_to 'Edit', edit_beer_path(@beer) %> |
 <%= link_to 'Back', beers_path %>

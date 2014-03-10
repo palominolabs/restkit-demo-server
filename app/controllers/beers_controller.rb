@@ -8,6 +8,7 @@ class BeersController < ApplicationController
 
   # GET /beers/1
   def show
+    @review = Review.new
   end
 
   # GET /beers/new
