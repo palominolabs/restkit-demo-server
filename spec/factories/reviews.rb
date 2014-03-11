@@ -2,9 +2,9 @@
 
 FactoryGirl.define do
   factory :review do
-    reviewer "MyString"
+    reviewer 'Hayden'
     rating 1
-    comment "MyText"
+    comment 'Some comment'
     beer
   end
 end

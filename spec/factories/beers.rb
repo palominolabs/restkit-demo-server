@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :beer do
-    name "MyString"
-    brewery "MyString"
+    name 'Enscorcelled'
+    brewery 'The Rare Barrel'
   end
 end
