@@ -5,6 +5,6 @@ FactoryGirl.define do
     reviewer "MyString"
     rating 1
     comment "MyText"
-    beer nil
+    beer
   end
 end

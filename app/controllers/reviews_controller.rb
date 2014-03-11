@@ -1,18 +1,17 @@
 class ReviewsController < ApplicationController
-
   def create
-    @beer = Beer.find(params[:beer_id])
-    @review = @beer.reviews.new(review_params)
+    @review = Review.new(review_params)
 
     if @review.save
       redirect_to @review.beer, notice: 'Review was successfully created.'
     else
-      render template: 'beer/show'
+      @beer = Beer.find(params[:review][:beer_id])
+      render template: 'beers/show'
     end
   end
 
   private
     def review_params
-      params.require(:review).permit(:reviewer, :rating, :comment)
+      params.require(:review).permit(:reviewer, :rating, :comment, :beer_id)
     end
 end
