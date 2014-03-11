@@ -10,6 +10,14 @@ class ReviewsController < ApplicationController
     end
   end
 
+  def destroy
+    @review = Review.find(params[:id])
+    @beer = @review.beer
+    @review.destroy
+
+    render template: 'beers/show'
+  end
+
   private
     def review_params
       params.require(:review).permit(:reviewer, :rating, :comment, :beer_id)

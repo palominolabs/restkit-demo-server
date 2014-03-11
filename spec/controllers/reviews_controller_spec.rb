@@ -31,7 +31,7 @@ describe ReviewsController do
       end
     end
 
-    describe 'with invalid params' do
+    context 'with invalid params' do
       context 'with invalid beer_id' do
         it 'raises an error' do
           Beer.any_instance.stub(:find).and_return(false)
@@ -52,6 +52,32 @@ describe ReviewsController do
           response.should render_template 'beers/show'
         end
       end
+    end
+  end
+
+  describe 'DELETE destroy' do
+    it 'destroys the requested review' do
+      beer = FactoryGirl.create(:beer)
+      review = FactoryGirl.create(:review, { beer: beer, beer_id: beer.id })
+      expect {
+        delete :destroy, id: review.id
+      }.to change(Review, :count).by -1
+    end
+
+    it 'assigns the target beer to @beer' do
+      beer = FactoryGirl.create(:beer)
+      review = FactoryGirl.create(:review, { beer: beer, beer_id: beer.id })
+      delete :destroy, id: review.id
+
+      assigns(:beer).should be_a Beer
+    end
+
+    it 'redirects to beer#show' do
+      beer = FactoryGirl.create(:beer)
+      review = FactoryGirl.create(:review, { beer: beer, beer_id: beer.id })
+      delete :destroy, id: review.id
+
+      response.should render_template 'beers/show'
     end
   end
 end

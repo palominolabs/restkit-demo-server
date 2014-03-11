@@ -8,7 +8,7 @@ describe ReviewsController do
     end
 
     it 'routes to #new' do
-      get('/reviews/new').should route_to('reviews#new')
+      get('/reviews/new').should_not route_to('reviews#new')
     end
 
     it 'routes to #show' do
