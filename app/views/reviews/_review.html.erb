@@ -7,5 +7,7 @@
     <strong>Rating: <%= review.rating %></strong>
     <br>
     <%= review.comment %>
-    <%= link_to 'Destroy', review, method: :delete, data: { confirm: 'Are you sure?' } %>
+    <% if current_user %>
+        <%= link_to 'Destroy', review, method: :delete, data: { confirm: 'Are you sure?' } %>
+    <% end %>
 </p>

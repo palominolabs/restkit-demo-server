@@ -1,27 +1,31 @@
 <h1>Listing beers</h1>
 
 <table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Brewery</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Brewery</th>
+            <th></th>
+            <% if current_user %>
+                <th></th>
+                <th></th>
+            <% end %>
+        </tr>
+    </thead>
 
-  <tbody>
-    <% @beers.each do |beer| %>
-      <tr>
-        <td><%= beer.name %></td>
-        <td><%= beer.brewery %></td>
-        <td><%= link_to 'Show', beer %></td>
-        <td><%= link_to 'Edit', edit_beer_path(beer) %></td>
-        <td><%= link_to 'Destroy', beer, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
+    <tbody>
+        <% @beers.each do |beer| %>
+            <tr>
+                <td><%= beer.name %></td>
+                <td><%= beer.brewery %></td>
+                <td><%= link_to 'Show', beer %></td>
+                <% if current_user %>
+                    <td><%= link_to 'Edit', edit_beer_path(beer) %></td>
+                    <td><%= link_to 'Destroy', beer, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                <% end %>
+            </tr>
+        <% end %>
+    </tbody>
 </table>
 
 <br>
