@@ -11,6 +11,11 @@
 </p>
 
 <p>
+    <strong>Average Rating:</strong>
+    <%= @beer.average_rating || 'Not Rated' %>
+</p>
+
+<p>
     <strong>Reviews:</strong>
     <%= render @beer.reviews %>
     <strong>Add a Review:</strong>

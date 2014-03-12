@@ -4,4 +4,17 @@ describe Beer do
   it { should validate_presence_of :name }
   it { should validate_presence_of :brewery }
   it { should have_many(:reviews).dependent :destroy }
+
+  describe '#average_rating' do
+    it 'should return the average rating for the given beer' do
+      beer = FactoryGirl.create(:beer)
+      otherBeer = FactoryGirl.create(:beer)
+
+      FactoryGirl.create(:review, { beer: beer, rating: 5 })
+      FactoryGirl.create(:review, { beer: beer, rating: 3 })
+      FactoryGirl.create(:review, { beer: otherBeer, rating: 1 })
+
+      beer.average_rating.should eql 4
+    end
+  end
 end
