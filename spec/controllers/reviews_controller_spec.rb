@@ -76,25 +76,41 @@ describe ReviewsController do
       delete :destroy, id: @review.id
     end
 
-    it 'destroys the requested review' do
-      controller.stub(:require_authentication)
-      expect {
+    context 'the logged in user is the review creator' do
+      before do
+        session[:user_id] = @review.user.id
+        controller.stub(:require_authentication)
+      end
+
+
+      it 'destroys the requested review' do
+        expect {
+          delete :destroy, id: @review.id
+        }.to change(Review, :count).by -1
+      end
+
+      it 'assigns the target beer to @beer' do
         delete :destroy, id: @review.id
-      }.to change(Review, :count).by -1
+
+        assigns(:beer).should be_a Beer
+      end
+
+      it 'render beer#show' do
+        delete :destroy, id: @review.id
+
+        should render_template 'beers/show'
+      end
     end
 
-    it 'assigns the target beer to @beer' do
-      controller.stub(:require_authentication)
-      delete :destroy, id: @review.id
+    context 'the logged in user is not the reviewer' do
+      it 'renders beer#show and flashes an alert' do
+        controller.stub(:require_authentication)
+        session[:user_id] = nil
+        delete :destroy, id: @review.id
 
-      assigns(:beer).should be_a Beer
-    end
-
-    it 'render beer#show' do
-      controller.stub(:require_authentication)
-      delete :destroy, id: @review.id
-
-      should render_template 'beers/show'
+        should render_template 'beers/show'
+        should set_the_flash[:alert].now.to 'Failed to delete review: You are not the reviewer!'
+      end
     end
   end
 end
