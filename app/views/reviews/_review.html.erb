@@ -1,13 +1,13 @@
 <p>
     <strong>Reviewer:</strong>
-    <%= review.reviewer %>
+    <%= review.user.email %>
 </p>
 
 <p>
     <strong>Rating: <%= review.rating %></strong>
     <br>
     <%= review.comment %>
-    <% if current_user %>
+    <% if current_user == review.user %>
         <%= link_to 'Destroy', review, method: :delete, data: {confirm: 'Are you sure?'} %>
     <% end %>
 </p>

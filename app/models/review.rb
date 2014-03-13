@@ -1,6 +1,8 @@
 class Review < ActiveRecord::Base
   belongs_to :beer
-  validates_presence_of :reviewer
+  belongs_to :user
+
   validates_presence_of :rating
   validates_presence_of :beer
+  validates_presence_of :user
 end

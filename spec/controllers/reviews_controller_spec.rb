@@ -14,7 +14,9 @@ describe ReviewsController do
       before do
         controller.stub(:require_authentication)
         @beer = FactoryGirl.create(:beer)
+        @user = FactoryGirl.create(:user)
         @valid_attributes = FactoryGirl.attributes_for(:review, { beer: nil, beer_id: @beer.id })
+        session[:user_id] = @user.id
       end
 
       it 'creates a new Review' do
