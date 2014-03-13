@@ -1,6 +1,12 @@
 PLReviews::Application.routes.draw do
+  get 'log_in', to: 'sessions#new', as: 'log_in'
+  get 'log_out', to: 'sessions#destroy', as: 'log_out'
+  get 'sign_up', to: 'users#new', as: 'sign_up'
+  root to: 'beers#index'
   resources :beers
   resources :reviews, only: [:create, :destroy]
+  resources :users, only: [:new, :create]
+  resources :sessions, only: [:new, :create, :destroy]
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

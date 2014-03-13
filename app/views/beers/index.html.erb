@@ -2,32 +2,34 @@
 
 <table>
     <thead>
-        <tr>
-            <th>Name</th>
-            <th>Brewery</th>
+    <tr>
+        <th>Name</th>
+        <th>Brewery</th>
+        <th></th>
+        <% if current_user %>
             <th></th>
-            <% if current_user %>
-                <th></th>
-                <th></th>
-            <% end %>
-        </tr>
+            <th></th>
+        <% end %>
+    </tr>
     </thead>
 
     <tbody>
-        <% @beers.each do |beer| %>
-            <tr>
-                <td><%= beer.name %></td>
-                <td><%= beer.brewery %></td>
-                <td><%= link_to 'Show', beer %></td>
-                <% if current_user %>
-                    <td><%= link_to 'Edit', edit_beer_path(beer) %></td>
-                    <td><%= link_to 'Destroy', beer, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-                <% end %>
-            </tr>
-        <% end %>
+    <% @beers.each do |beer| %>
+        <tr>
+            <td><%= beer.name %></td>
+            <td><%= beer.brewery %></td>
+            <td><%= link_to 'Show', beer %></td>
+            <% if current_user %>
+                <td><%= link_to 'Edit', edit_beer_path(beer) %></td>
+                <td><%= link_to 'Destroy', beer, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+            <% end %>
+        </tr>
+    <% end %>
     </tbody>
 </table>
 
 <br>
 
-<%= link_to 'New Beer', new_beer_path %>
+<% if current_user %>
+    <%= link_to 'New Beer', new_beer_path %>
+<% end %>

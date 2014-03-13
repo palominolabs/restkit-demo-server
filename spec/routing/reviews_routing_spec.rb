@@ -4,27 +4,27 @@ describe ReviewsController do
   describe 'routing' do
 
     it 'does not route to #index' do
-      get('/reviews').should_not route_to('reviews#index')
+      get('/reviews').should_not be_routable
     end
 
-    it 'routes to #new' do
-      get('/reviews/new').should_not route_to('reviews#new')
+    it 'does not route to #new' do
+      get('/reviews/new').should_not be_routable
     end
 
-    it 'routes to #show' do
-      get('/reviews/1').should_not route_to('reviews#show', :id => '1')
+    it 'does not route to #show' do
+      get('/reviews/1').should_not be_routable
     end
 
-    it 'routes to #edit' do
-      get('/reviews/1/edit').should_not route_to('reviews#edit', :id => '1')
+    it 'does not route to #edit' do
+      get('/reviews/1/edit').should_not be_routable
     end
 
     it 'routes to #create' do
       post('/reviews').should route_to('reviews#create')
     end
 
-    it 'routes to #update' do
-      put('/reviews/1').should_not route_to('reviews#update', :id => '1')
+    it 'does not route to #update' do
+      put('/reviews/1').should_not be_routable
     end
 
     it 'routes to #destroy' do
