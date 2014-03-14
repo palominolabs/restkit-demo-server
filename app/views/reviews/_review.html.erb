@@ -1,13 +1,13 @@
-<p>
-    <strong>Reviewer:</strong>
-    <%= review.user.email %>
-</p>
-
-<p>
-    <strong>Rating: <%= review.rating %></strong>
-    <br>
-    <%= review.comment %>
-    <% if current_user == review.user %>
-        <%= link_to 'Delete', review, method: :delete, data: {confirm: 'Are you sure?'} %>
+<div class='panel panel-default'>
+    <div class='panel-heading'>
+        <h3 class='panel-title'><%= review.user.email %> <span class='badge pull-right'><%= review.rating %></span></h3>
+    </div>
+    <% if ((review.comment and review.comment.length > 0) or current_user == review.user) %>
+        <div class='panel-body'>
+            <%= review.comment %>
+            <% if current_user == review.user %>
+                <%= link_to 'Delete', review, method: :delete, data: {confirm: 'Are you sure?'}, class: 'pull-right' %>
+            <% end %>
+        </div>
     <% end %>
-</p>
+</div>

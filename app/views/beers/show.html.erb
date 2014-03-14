@@ -1,31 +1,39 @@
-<p id="notice"><%= notice %></p>
+<div class='row hidden-xs'>
+    <div class="col-sm-12">
+        <h1 class='beer-title'><%= @beer.name %></h1>
+        <h1 class='beer-title'><small> by <%= @beer.brewery %></small></h1>
+        <span class='beer-avg-rating'><%= @beer.average_rating || 'Not Rated' %></span>
+    </div>
+</div>
+<div class='row visible-xs'>
+    <div class="col-xs-12">
+        <h1 class='beer-title'><%= @beer.name %></h1>
+    </div>
+    <div class="col-xs-12">
+        <h1 class='beer-title'><small> by <%= @beer.brewery %></small></h1>
+    </div>
+    <div class="col-xs-12">
+        <span class='beer-avg-rating'><%= @beer.average_rating || 'Not Rated' %></span>
+    </div>
+</div>
 
-<p>
-    <strong>Name:</strong>
-    <%= @beer.name %>
-</p>
+<div class='row'>
+    <div class='col-sm-12'>
+        <% if current_user %>
+            <%= link_to 'Edit', edit_beer_path(@beer) %> |
+        <% end %>
+        <%= link_to 'Back', beers_path %>
+    </div>
+</div>
+<div class="row">
+    <div class='col-sm-12'>
+        <% if @beer.reviews.length > 0 %>
+            <h3>Reviews</h3>
+            <%= render @beer.reviews %>
+        <% end %>
 
-<p>
-    <strong>Brewery:</strong>
-    <%= @beer.brewery %>
-</p>
-
-<p>
-    <strong>Average Rating:</strong>
-    <%= @beer.average_rating || 'Not Rated' %>
-</p>
-
-<p>
-    <strong>Reviews:</strong>
-    <%= render @beer.reviews %>
-
-    <% if current_user %>
-        <strong>Add a Review:</strong>
-        <%= render 'reviews/form' %>
-    <% end %>
-</p>
-
-<% if current_user %>
-    <%= link_to 'Edit', edit_beer_path(@beer) %> |
-<% end %>
-<%= link_to 'Back', beers_path %>
+        <% if current_user %>
+            <%= render 'reviews/form' %>
+        <% end %>
+    </div>
+</div>

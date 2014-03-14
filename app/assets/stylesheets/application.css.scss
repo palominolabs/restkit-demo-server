@@ -9,8 +9,35 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
- *= require_tree .
  */
 @import 'bootstrap';
 @import 'bootstrap/theme';
 @import 'font-awesome';
+
+#logo {
+  width: 20px;
+  height: 20px;
+  margin-bottom: 5px;
+}
+
+body {
+  padding-top: 50px;
+}
+
+.new-form {
+  padding-top: 20px;
+}
+
+.flash-message {
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
+
+/* Customize container */
+@media (min-width: 768px) {
+  .container {
+    max-width: 730px;
+  }
+}
+
+@import '*';
