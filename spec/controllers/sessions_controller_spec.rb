@@ -11,8 +11,10 @@ describe SessionsController do
 
   describe 'POST create' do
     before do
+      @user = FactoryGirl.create(:user)
       @login_form_params = FactoryGirl.attributes_for(:user)
-      @login_form_params.slice!(:email, :password)
+      @login_form_params.slice!(:password)
+      @login_form_params[:email] = @user.email
     end
 
     it 'does not require authentication' do
@@ -22,7 +24,6 @@ describe SessionsController do
 
     context 'successful authentication' do
       before do
-        @user = FactoryGirl.create(:user)
         User.any_instance.should_receive(:authenticate).and_return(true)
         post :create, @login_form_params
       end

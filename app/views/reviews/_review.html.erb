@@ -1,6 +1,6 @@
 <div class='panel panel-default'>
     <div class='panel-heading'>
-        <h3 class='panel-title'><%= review.user.email %> <span class='badge pull-right'><%= review.rating %></span></h3>
+        <h3 class='panel-title'><%= review.user.name %> <span class='badge pull-right'><%= review.rating %></span></h3>
     </div>
     <% if ((review.comment and review.comment.length > 0) or current_user == review.user) %>
         <div class='panel-body'>
