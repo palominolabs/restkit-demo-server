@@ -42,6 +42,7 @@ gem 'bcrypt-ruby', '~> 3.1.2'
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'ninefold'
 end
 
 group :development, :test do
