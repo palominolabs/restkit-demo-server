@@ -3,11 +3,16 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .beer-title {
-  margin: 0px 5px 0px 0px;
+  margin-right:5px;
   display: inline;
 }
 
 .beer-avg-rating {
   @extend .badge;
   margin-bottom: 5px;
+}
+
+.beer-title-row {
+  @extend .row;
+  margin-top: 20px;
 }
