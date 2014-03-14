@@ -8,8 +8,4 @@ class Beer < ActiveRecord::Base
   def average_rating
     reviews.average(:rating)
   end
-
-  def has_been_reviewed_by(user)
-    reviewers.where(id: user.id).any?
-  end
 end

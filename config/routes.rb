@@ -5,7 +5,6 @@ PLReviews::Application.routes.draw do
   root to: 'beers#index'
   resources :beers
   resources :reviews, only: [:create, :destroy]
-  resources :users, only: [:new, :create]
   resources :sessions, only: [:new, :create, :destroy]
 
   # The priority is based upon order of creation: first created -> highest priority.
