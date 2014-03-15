@@ -6,7 +6,11 @@
         <div class='panel-body'>
             <%= review.comment %>
             <% if current_user == review.user %>
-                <%= link_to 'Delete', review, method: :delete, data: {confirm: 'Are you sure?'}, class: 'pull-right' %>
+                <%= link_to review, method: :delete,
+                            data: {confirm: 'Are you sure?'},
+                            class: 'btn btn-default pull-right' do %>
+                    <span class='glyphicon glyphicon-remove'></span>
+                <% end %>
             <% end %>
         </div>
     <% end %>

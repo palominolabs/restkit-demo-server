@@ -22,8 +22,13 @@
                     <td><%= beer.average_rating || 'Not Rated' %></td>
                     <% if current_user %>
                         <td>
-                            <%= link_to 'Edit', edit_beer_path(beer) %>
-                            <%= link_to 'Delete', beer, method: :delete, data: {confirm: 'Are you sure?'} %>
+                            <%= link_to beer, method: :delete, data: {confirm: 'Are you sure?'},
+                                        class: 'btn btn-default pull-right', style: 'margin-left: 5px' do %>
+                                <span class='glyphicon glyphicon-remove'></span>
+                            <% end %>
+                            <%= link_to edit_beer_path(beer), class: 'btn btn-default pull-right' do %>
+                                <span class='glyphicon glyphicon-pencil'></span>
+                            <% end %>
                         </td>
                     <% end %>
                 </tr>
