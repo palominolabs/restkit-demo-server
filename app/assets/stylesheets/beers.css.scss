@@ -2,6 +2,10 @@
 // They will automatically be included in application.css.scss.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.beer-index-current {
+  font-weight: bold;
+}
+
 .beer-title {
   margin-right:5px;
   display: inline;

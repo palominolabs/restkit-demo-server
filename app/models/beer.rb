@@ -6,6 +6,6 @@ class Beer < ActiveRecord::Base
   validates_presence_of :brewery
 
   def average_rating
-    reviews.average(:rating).round(1)
+    reviews.average(:rating).round(1) if reviews.any?
   end
 end

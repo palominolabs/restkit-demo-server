@@ -5,9 +5,9 @@
         <table class='table'>
             <thead>
             <tr>
-                <th>Name</th>
-                <th>Brewery</th>
-                <th>Avg. Rating</th>
+                <th><%= sortable 'name' %></th>
+                <th><%= sortable 'brewery' %></th>
+                <th>Average Rating</th>
                 <% if current_user %>
                     <th></th>
                 <% end %>
