@@ -22,8 +22,9 @@
         </div>
         <div class='collapse navbar-collapse'>
             <ul class='nav navbar-nav pull-right'>
+                <li><%= link_to 'Beers', beers_path %></li>
+                <li><%= link_to 'Breweries', breweries_path %></li>
                 <% if current_user %>
-                    <li>Logged in as <%= current_user.email %></li>
                     <li><%= link_to 'Log out', log_out_path %></li>
                 <% else %>
                     <li><%= link_to 'Log in', log_in_path %></li>

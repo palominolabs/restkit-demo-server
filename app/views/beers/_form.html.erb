@@ -25,7 +25,7 @@
             <%= f.label :brewery, class: 'col-sm-3 control-label' %>
             <div class='col-sm-8'>
                 <% if @breweries.length > 0 %>
-                    <%= f.select :brewery_id, options_from_collection_for_select(@breweries, :id, :name), class: 'form-control' %> or
+                    <%= f.select :brewery_id, options_from_collection_for_select(@breweries, :id, :name, @beer.brewery.id), class: 'form-control' %> or
                 <% end %>
                  <%= link_to 'add a new brewery', new_brewery_path %>
             </div>
