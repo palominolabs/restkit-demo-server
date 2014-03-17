@@ -1,7 +1,7 @@
 <div class='beer-title-row hidden-xs'>
     <div class="col-sm-12">
         <h1 class='beer-title'><%= @beer.name %></h1>
-        <h1 class='beer-title'><small> by <%= @beer.brewery %></small></h1>
+        <h1 class='beer-title'><small> by <%= link_to @beer.brewery.name, @beer.brewery %></small></h1>
         <span class='beer-avg-rating'><%= @beer.average_rating || 'Not Rated' %></span>
     </div>
 </div>

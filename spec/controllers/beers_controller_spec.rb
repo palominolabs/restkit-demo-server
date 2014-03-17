@@ -3,6 +3,11 @@ require 'spec_helper'
 describe BeersController do
 
   describe 'GET index' do
+    it 'does not require authentication' do
+      controller.should_not_receive :require_authentication
+      get :index, {}
+    end
+
     it 'assigns all beers as @beers' do
       beer = FactoryGirl.create(:beer)
       get :index, {}
@@ -11,6 +16,12 @@ describe BeersController do
   end
 
   describe 'GET show' do
+    it 'does not require authentication' do
+      controller.should_not_receive :require_authentication
+      beer = FactoryGirl.create(:beer)
+      get :show, {id: beer.to_param}
+    end
+
     it 'assigns the requested beer as @beer' do
       beer = FactoryGirl.create(:beer)
       get :show, {id: beer.to_param}
@@ -60,22 +71,24 @@ describe BeersController do
     context 'with valid params' do
       before do
         controller.stub(:require_authentication)
+        brewery = FactoryGirl.create(:brewery)
+        @beer_attributes = FactoryGirl.attributes_for(:beer, {brewery: brewery, brewery_id: brewery.id})
       end
 
       it 'creates a new Beer' do
         expect {
-          post :create, {beer: FactoryGirl.attributes_for(:beer)}
+          post :create, {beer: @beer_attributes}
         }.to change(Beer, :count).by 1
       end
 
       it 'assigns a newly created beer as @beer' do
-        post :create, {beer: FactoryGirl.attributes_for(:beer)}
+        post :create, {beer: @beer_attributes}
         assigns(:beer).should be_a Beer
         assigns(:beer).should be_persisted
       end
 
       it 'redirects to the created beer' do
-        post :create, {beer: FactoryGirl.attributes_for(:beer)}
+        post :create, {beer: @beer_attributes}
         should redirect_to Beer.last
       end
     end

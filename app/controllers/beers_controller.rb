@@ -1,11 +1,17 @@
 class BeersController < ApplicationController
   skip_before_action :require_authentication, only: [:index, :show]
   before_action :set_beer, only: [:show, :edit, :update, :destroy]
+  before_action :set_breweries, only: [:new, :edit, :create]
   helper_method :sort_column, :sort_direction
 
   # GET /beers
   def index
-    @beers = Beer.order(sort_column + ' ' + sort_direction)
+    if params[:brewery_id]
+      brewery = Brewery.find(params[:brewery_id])
+      @beers = brewery.beers
+    else
+      @beers = Beer.order(sort_column + ' ' + sort_direction)
+    end
   end
 
   # GET /beers/1
@@ -54,9 +60,13 @@ class BeersController < ApplicationController
     @beer = Beer.find(params[:id])
   end
 
+  def set_breweries
+    @breweries = Brewery.all
+  end
+
   # Never trust parameters from the scary internet, only allow the white list through.
   def beer_params
-    params.require(:beer).permit(:name, :brewery)
+    params.require(:beer).permit(:name, :brewery_id)
   end
 
   def sort_column

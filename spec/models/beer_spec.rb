@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Beer do
   it { should validate_presence_of :name }
   it { should validate_presence_of :brewery }
+  it { should belong_to :brewery }
   it { should have_many(:reviews).dependent :destroy }
   it { should have_many(:reviewers) }
 

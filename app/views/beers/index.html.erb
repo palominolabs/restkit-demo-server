@@ -1,46 +1,14 @@
 <div class="row">
     <div class="col-xs-12">
-        <h1>beers</h1>
+        <h1>Beers</h1>
 
-        <table class='table'>
-            <thead>
-            <tr>
-                <th><%= sortable 'name' %></th>
-                <th><%= sortable 'brewery' %></th>
-                <th>Average Rating</th>
-                <% if current_user %>
-                    <th></th>
-                <% end %>
-            </tr>
-            </thead>
-
-            <tbody>
-            <% @beers.each do |beer| %>
-                <tr>
-                    <td><%= link_to beer.name, beer %></td>
-                    <td><%= beer.brewery %></td>
-                    <td><%= beer.average_rating || 'Not Rated' %></td>
-                    <% if current_user %>
-                        <td>
-                            <%= link_to beer, method: :delete, data: {confirm: 'Are you sure?'},
-                                        class: 'btn btn-default pull-right', style: 'margin-left: 5px' do %>
-                                <span class='glyphicon glyphicon-remove'></span>
-                            <% end %>
-                            <%= link_to edit_beer_path(beer), class: 'btn btn-default pull-right' do %>
-                                <span class='glyphicon glyphicon-pencil'></span>
-                            <% end %>
-                        </td>
-                    <% end %>
-                </tr>
-            <% end %>
-            </tbody>
-        </table>
+        <%= render 'list' %>
 
         <br>
-
         <% if current_user %>
             <%= link_to 'New Beer', new_beer_path, class: 'btn btn-default' %>
         <% end %>
+        <br>
     </div>
 </div>
 

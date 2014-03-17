@@ -1,9 +1,14 @@
 PLReviews::Application.routes.draw do
+  resources :breweries
+
   get 'log_in', to: 'sessions#new', as: 'log_in'
   get 'log_out', to: 'sessions#destroy', as: 'log_out'
   get 'sign_up', to: 'users#new', as: 'sign_up'
   root to: 'beers#index'
   resources :beers
+  resources :breweries do
+    resources :beers, only: [:index]
+  end
   resources :reviews, only: [:create, :destroy]
   resources :sessions, only: [:new, :create, :destroy]
 

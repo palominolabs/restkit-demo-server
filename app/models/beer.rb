@@ -1,4 +1,5 @@
 class Beer < ActiveRecord::Base
+  belongs_to :brewery
   has_many :reviews, dependent: :destroy
   has_many :reviewers, through: :reviews, class_name: 'User', source: :user
 
