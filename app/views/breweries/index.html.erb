@@ -1,27 +1,13 @@
-<h1>Listing breweries</h1>
+<div class="row">
+    <div class="col-xs-12">
+        <h1>Breweries</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
+        <%= render 'list' %>
 
-  <tbody>
-    <% @breweries.each do |brewery| %>
-      <tr>
-        <td><%= brewery.name %></td>
-        <td><%= link_to 'Show', brewery %></td>
-        <td><%= link_to 'Edit', edit_brewery_path(brewery) %></td>
-        <td><%= link_to 'Destroy', brewery, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Brewery', new_brewery_path %>
+        <br>
+        <% if current_user %>
+            <%= link_to 'New Brewery', new_brewery_path, class: 'btn btn-default' %>
+        <% end %>
+        <br>
+    </div>
+</div>
