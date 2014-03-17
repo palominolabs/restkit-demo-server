@@ -1,8 +1,8 @@
 <table class='table'>
     <thead>
     <tr>
-        <th><%= 'name' %></th>
-        <th><%= 'Beers Count' %></th>
+        <th><%= sortable 'name' %></th>
+        <th><%= sortable 'beers_count', 'No. of Beers' %></th>
         <th><%= 'Average Rating' %></th>
         <% if current_user %>
             <th></th>
@@ -14,7 +14,7 @@
     <% @breweries.each do |brewery| %>
         <tr>
             <td><%= link_to brewery.name, brewery %></td>
-            <td><%= link_to brewery.beers.count, brewery_beers_path(brewery.id) %></td>
+            <td><%= link_to brewery.beers_count, brewery_beers_path(brewery.id) %></td>
             <td><%= brewery.average_rating || 'Not Rated' %></td>
             <% if current_user %>
                 <td>

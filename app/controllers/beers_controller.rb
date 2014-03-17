@@ -8,7 +8,7 @@ class BeersController < ApplicationController
   def index
     if params[:brewery_id]
       brewery = Brewery.find(params[:brewery_id])
-      @beers = brewery.beers
+      @beers = brewery.beers.order(sort_column + ' ' + sort_direction)
     else
       @beers = Beer.order(sort_column + ' ' + sort_direction)
     end
