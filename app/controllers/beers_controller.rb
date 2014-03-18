@@ -1,7 +1,7 @@
 class BeersController < ApplicationController
   skip_before_action :require_authentication, only: [:index, :show]
-  before_action :set_beer, only: [:show, :edit, :update, :destroy]
-  before_action :set_breweries, only: [:new, :edit, :create]
+  before_action :set_beer, only: [:show, :edit, :update, :destroy, :open]
+  before_action :set_breweries, only: [:new, :edit, :create, :update]
   helper_method :sort_column, :sort_direction
 
   # GET /beers
@@ -54,6 +54,24 @@ class BeersController < ApplicationController
     redirect_to beers_url
   end
 
+  # GET OPEN /beer/1/open
+  def open
+    if @beer.inventory > 0
+      @beer.decrement(:inventory)
+
+      if @beer.save
+        flash.now.notice = "A bottle of #{@beer.name} was successfully opened."
+      else
+        flash.now.alert = "Failed to open a bottle of #{@beer.name}."
+      end
+    else
+      flash.now.alert = "No bottles of #{@beer.name} left to open."
+    end
+
+    @review = Review.new
+    render template: 'beers/show'
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_beer
@@ -66,7 +84,7 @@ class BeersController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def beer_params
-    params.require(:beer).permit(:name, :brewery_id)
+    params.require(:beer).permit(:name, :brewery_id, :inventory)
   end
 
   def sort_column

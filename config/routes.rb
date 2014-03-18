@@ -4,6 +4,7 @@ PLReviews::Application.routes.draw do
   get 'log_in', to: 'sessions#new', as: 'log_in'
   get 'log_out', to: 'sessions#destroy', as: 'log_out'
   get 'sign_up', to: 'users#new', as: 'sign_up'
+  get 'beers/:id/open', to: 'beers#open', as: 'open_beer'
   root to: 'beers#index'
   resources :beers
   resources :breweries do

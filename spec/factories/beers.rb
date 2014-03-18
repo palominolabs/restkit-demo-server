@@ -3,6 +3,7 @@
 FactoryGirl.define do
   factory :beer do
     name 'Enscorcelled'
+    inventory 1
     brewery
   end
 end

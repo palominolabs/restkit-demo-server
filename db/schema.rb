@@ -11,13 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140317202102) do
+ActiveRecord::Schema.define(version: 20140317234307) do
 
   create_table "beers", force: true do |t|
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "brewery_id"
+    t.integer  "inventory"
   end
 
   add_index "beers", ["brewery_id"], name: "index_beers_on_brewery_id"

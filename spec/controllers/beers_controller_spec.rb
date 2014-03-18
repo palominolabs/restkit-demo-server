@@ -166,6 +166,73 @@ describe BeersController do
     end
   end
 
+  describe 'GET open' do
+    before do
+      @beer = FactoryGirl.create(:beer)
+    end
+    it 'requires authentication' do
+      controller.should_receive :require_authentication
+      get :open, {id: @beer.to_param, beer: @beer}
+    end
+
+    context 'with authorized user' do
+      before do
+        controller.stub(:require_authentication)
+      end
+
+      it 'assigns @beer to the specified beer' do
+        get :open, {id: @beer.id, beer: @beer}
+        assigns(:beer).should be_a Beer
+        assigns(:beer).name.should eql @beer.name
+      end
+
+      it 'assigns  @review to a new review' do
+        get :open, {id: @beer.id, beer: @beer}
+        assigns(:review).should be_new_record
+      end
+
+      it 'renders beers#show' do
+        get :open, {id: @beer.id, beer: @beer}
+        should render_template :show
+      end
+
+      context 'with one or more beers in the inventory' do
+        before do
+          @beer = FactoryGirl.create(:beer, {name: 'test_beer', inventory: 2})
+        end
+
+        it 'decrements the inventory' do
+          get :open, {id: @beer.id, beer: @beer}
+          assigns(:beer).inventory.should eql 1
+        end
+
+        it 'flashes a notice' do
+          get :open, {id: @beer.id, beer: @beer}
+          should set_the_flash[:notice].now.to 'A bottle of test_beer was successfully opened.'
+        end
+
+        context 'with invalid parameters' do
+          it 'flashes a failure alert' do
+            Beer.any_instance.stub(:save).and_return(false)
+            get :open, {id: @beer.id, beer: @beer}
+            should set_the_flash[:alert].now.to 'Failed to open a bottle of test_beer.'
+          end
+        end
+      end
+
+      context 'with zero beers in the inventory' do
+        before do
+          @beer = FactoryGirl.create(:beer, {name: 'test_beer', inventory: 0})
+        end
+
+        it 'flashes an alert' do
+          get :open, {id: @beer.id, beer: @beer}
+          should set_the_flash[:alert].now.to 'No bottles of test_beer left to open.'
+        end
+      end
+    end
+  end
+
   describe 'DELETE destroy' do
     it 'requires authentication' do
       controller.should_receive :require_authentication

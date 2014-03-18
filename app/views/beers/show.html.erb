@@ -10,13 +10,18 @@
         <h1 class='beer-title'><%= @beer.name %></h1>
     </div>
     <div class="col-xs-12">
-        <h1 class='beer-title'><small> by <%= @beer.brewery %></small></h1>
+        <h1 class='beer-title'><small> by <%= @beer.brewery.name %></small></h1>
     </div>
     <div class="col-xs-12">
         <span class='beer-avg-rating'><%= @beer.average_rating || 'Not Rated' %></span>
     </div>
 </div>
 
+<div class='row'>
+    <div class='col-sm-12'>
+        <h4>Inventory Count: <small><strong><%= @beer.inventory %></strong></small></h4>
+    </div>
+</div>
 <div class='row'>
     <div class='col-sm-12'>
         <%= link_to beers_path, class: 'btn btn-default' do %>
@@ -26,9 +31,11 @@
             <%= link_to edit_beer_path(@beer), class: 'btn btn-default' do %>
                 <span class='glyphicon glyphicon-pencil'></span>
             <% end %>
+            <%= link_to 'Open a bottle', :open_beer, class: 'btn btn-default' %>
         <% end %>
     </div>
 </div>
+<br>
 <div class="row">
     <div class='col-sm-12'>
         <% if @beer.reviews.length > 0 %>
