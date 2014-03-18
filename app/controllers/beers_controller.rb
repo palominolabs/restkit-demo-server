@@ -81,7 +81,7 @@ class BeersController < ApplicationController
   end
 
   def set_breweries
-    @breweries = Brewery.all
+    @breweries = Brewery.order(:name)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
