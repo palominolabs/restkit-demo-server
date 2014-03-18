@@ -31,6 +31,7 @@ class BeersController < ApplicationController
   # POST /beers
   def create
     @beer = Beer.new(beer_params)
+    @beer.beer_added_activities << BeerAddedActivity.new(beer: @beer, user: current_user)
 
     if @beer.save
       redirect_to @beer, notice: 'Beer was successfully created.'
@@ -58,18 +59,19 @@ class BeersController < ApplicationController
   def open
     if @beer.inventory > 0
       @beer.decrement(:inventory)
+      @beer.beer_opened_activities << BeerOpenedActivity.new(user: current_user)
 
       if @beer.save
-        flash.now.notice = "A bottle of #{@beer.name} was successfully opened."
+        flash.notice = "A bottle of #{@beer.name} was successfully opened."
       else
-        flash.now.alert = "Failed to open a bottle of #{@beer.name}."
+        flash.alert = "Failed to open a bottle of #{@beer.name}."
       end
     else
-      flash.now.alert = "No bottles of #{@beer.name} left to open."
+      flash.alert = "No bottles of #{@beer.name} left to open."
     end
 
     @review = Review.new
-    render template: 'beers/show'
+    redirect_to @beer
   end
 
   private

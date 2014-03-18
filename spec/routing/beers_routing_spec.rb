@@ -12,11 +12,11 @@ describe BeersController do
     end
 
     it 'routes to #show' do
-      get('/beers/1').should route_to('beers#show', :id => '1')
+      get('/beers/1').should route_to('beers#show', id: '1')
     end
 
     it 'routes to #edit' do
-      get('/beers/1/edit').should route_to('beers#edit', :id => '1')
+      get('/beers/1/edit').should route_to('beers#edit', id: '1')
     end
 
     it 'routes to #create' do
@@ -24,12 +24,15 @@ describe BeersController do
     end
 
     it 'routes to #update' do
-      put('/beers/1').should route_to('beers#update', :id => '1')
+      put('/beers/1').should route_to('beers#update', id: '1')
     end
 
     it 'routes to #destroy' do
-      delete('/beers/1').should route_to('beers#destroy', :id => '1')
+      delete('/beers/1').should route_to('beers#destroy', id: '1')
     end
 
+    it 'routes to #open' do
+      get('/beers/1/open').should route_to('beers#open',id: '1')
+    end
   end
 end

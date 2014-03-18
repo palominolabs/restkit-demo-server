@@ -70,6 +70,8 @@ describe BeersController do
 
     context 'with valid params' do
       before do
+        user = FactoryGirl.build(:user)
+        controller.stub(:current_user).and_return(user)
         controller.stub(:require_authentication)
         brewery = FactoryGirl.create(:brewery)
         @beer_attributes = FactoryGirl.attributes_for(:beer, {brewery: brewery, brewery_id: brewery.id})
@@ -87,9 +89,23 @@ describe BeersController do
         assigns(:beer).should be_persisted
       end
 
+      it 'creates a beer_added_activity' do
+        post :create, {beer: @beer_attributes}
+        assigns(:beer).beer_added_activities.length.should eql 1
+        assigns(:beer).beer_added_activities.first.should be_a BeerAddedActivity
+      end
+
       it 'redirects to the created beer' do
         post :create, {beer: @beer_attributes}
         should redirect_to Beer.last
+      end
+
+      context 'with invalid beer_added_activity' do
+        it 're-renders the \'new\' template' do
+          controller.stub(:current_user).and_return(nil)
+          post :create, {beer: @beer_attributes}
+          should render_template :new
+        end
       end
     end
 
@@ -178,6 +194,8 @@ describe BeersController do
     context 'with authorized user' do
       before do
         controller.stub(:require_authentication)
+        user = FactoryGirl.build(:user)
+        controller.stub(:current_user).and_return(user)
       end
 
       it 'assigns @beer to the specified beer' do
@@ -193,7 +211,7 @@ describe BeersController do
 
       it 'renders beers#show' do
         get :open, {id: @beer.id, beer: @beer}
-        should render_template :show
+        should redirect_to(@beer)
       end
 
       context 'with one or more beers in the inventory' do
@@ -206,16 +224,22 @@ describe BeersController do
           assigns(:beer).inventory.should eql 1
         end
 
+        it 'creates a beer_opened_activity' do
+          get :open, {id: @beer.id, beer: @beer}
+          assigns(:beer).beer_opened_activities.length.should eql 1
+          assigns(:beer).beer_opened_activities.first.should be_a BeerOpenedActivity
+        end
+
         it 'flashes a notice' do
           get :open, {id: @beer.id, beer: @beer}
-          should set_the_flash[:notice].now.to 'A bottle of test_beer was successfully opened.'
+          should set_the_flash[:notice].to 'A bottle of test_beer was successfully opened.'
         end
 
         context 'with invalid parameters' do
           it 'flashes a failure alert' do
             Beer.any_instance.stub(:save).and_return(false)
             get :open, {id: @beer.id, beer: @beer}
-            should set_the_flash[:alert].now.to 'Failed to open a bottle of test_beer.'
+            should set_the_flash[:alert].to 'Failed to open a bottle of test_beer.'
           end
         end
       end
@@ -227,7 +251,16 @@ describe BeersController do
 
         it 'flashes an alert' do
           get :open, {id: @beer.id, beer: @beer}
-          should set_the_flash[:alert].now.to 'No bottles of test_beer left to open.'
+          should set_the_flash[:alert].to 'No bottles of test_beer left to open.'
+        end
+      end
+
+      context 'with invalid beer_opened_activity' do
+        it 'flashes an alert' do
+          controller.stub(:current_user).and_return(nil)
+          @beer = FactoryGirl.create(:beer, {name: 'test_beer', inventory: 2})
+          get :open, {id: @beer.id, beer: @beer}
+          should set_the_flash[:alert].to 'Failed to open a bottle of test_beer.'
         end
       end
     end

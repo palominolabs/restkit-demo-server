@@ -4,7 +4,7 @@
         <th><%= sortable 'name' %></th>
         <th>Brewery</th>
         <th>Average Rating</th>
-        <th>Inventory Count</th>
+        <th>Inventory</th>
         <% if current_user %>
             <th></th>
         <% end %>
@@ -24,10 +24,10 @@
                                 class: 'btn btn-default pull-right', style: 'margin-left: 5px' do %>
                         <span class='glyphicon glyphicon-remove'></span>
                     <% end %>
-                    <%= link_to edit_beer_path(beer), class: 'btn btn-default pull-right' do %>
+                    <%= link_to edit_beer_path(beer), class: 'btn btn-default pull-right', style: 'margin-left: 5px' do %>
                         <span class='glyphicon glyphicon-pencil'></span>
                     <% end %>
-                    <%= link_to 'Open Bottle', open_beer_path(beer), class: 'btn btn-default' %>
+                    <%= link_to 'Open', open_beer_path(beer), class: 'btn btn-default pull-right' %>
                 </td>
             <% end %>
         </tr>

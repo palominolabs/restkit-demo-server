@@ -6,6 +6,7 @@ PLReviews::Application.routes.draw do
   get 'sign_up', to: 'users#new', as: 'sign_up'
   get 'beers/:id/open', to: 'beers#open', as: 'open_beer'
   root to: 'beers#index'
+  resources :activities, only: [:index, :show]
   resources :beers
   resources :breweries do
     resources :beers, only: [:index]
