@@ -12,11 +12,14 @@ class BeersController < ApplicationController
     else
       @beers = Beer.order(sort_column + ' ' + sort_direction)
     end
+
+    respond_with @beers
   end
 
   # GET /beers/1
   def show
     @review = Review.new
+    respond_with @brewery
   end
 
   # GET /beers/new

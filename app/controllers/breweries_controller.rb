@@ -7,11 +7,14 @@ class BreweriesController < ApplicationController
   # GET /breweries.json
   def index
     @breweries = Brewery.order(sort_column + ' ' + sort_direction)
+
+    respond_with @breweries
   end
 
   # GET /breweries/1
   # GET /breweries/1.json
   def show
+    respond_with @brewery
   end
 
   # GET /breweries/new

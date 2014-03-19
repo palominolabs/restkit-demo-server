@@ -5,10 +5,12 @@ class ActivitiesController < ApplicationController
   # GET /events
   def index
     @activities = Activity.all
+    respond_with @activities
   end
 
   # GET /show/1
   def show
+    respond_with @activity
   end
 
   private

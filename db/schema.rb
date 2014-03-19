@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140318160705) do
+ActiveRecord::Schema.define(version: 20140318233755) do
 
   create_table "activities", force: true do |t|
     t.string   "type"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20140318160705) do
     t.datetime "updated_at"
     t.integer  "brewery_id"
     t.integer  "inventory"
+    t.integer  "reviews_count"
   end
 
   add_index "beers", ["brewery_id"], name: "index_beers_on_brewery_id"

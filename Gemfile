@@ -23,7 +23,7 @@ gem 'turbolinks'
 gem 'jquery-turbolinks'
 
 # Active Model Serializer for structuring JSON responses
-gem 'active_model_serializers'
+gem 'active_model_serializers', git: 'https://github.com/rails-api/active_model_serializers.git'
  
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.

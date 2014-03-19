@@ -4,6 +4,13 @@ GIT
   specs:
     bootstrap_form (2.0.1)
 
+GIT
+  remote: https://github.com/rails-api/active_model_serializers.git
+  revision: 2e31a141252a37f75cb5dc10e96d3975f1046085
+  specs:
+    active_model_serializers (0.9.0.alpha1)
+      activemodel (>= 3.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -16,8 +23,6 @@ GEM
       erubis (~> 2.7.0)
       rack (~> 1.5.2)
       rack-test (~> 0.6.2)
-    active_model_serializers (0.8.1)
-      activemodel (>= 3.0)
     activemodel (4.0.3)
       activesupport (= 4.0.3)
       builder (~> 3.1.0)
@@ -161,7 +166,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active_model_serializers
+  active_model_serializers!
   bcrypt-ruby (~> 3.1.2)
   better_errors
   binding_of_caller
