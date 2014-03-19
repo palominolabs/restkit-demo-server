@@ -13,6 +13,10 @@ class BeersController < ApplicationController
       @beers = Beer.order(sort_column + ' ' + sort_direction)
     end
 
+    if params[:in_stock] == '1'
+      @beers.where!('inventory > 0')
+    end
+
     respond_with @beers
   end
 

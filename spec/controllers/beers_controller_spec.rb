@@ -13,6 +13,25 @@ describe BeersController do
       get :index, {}
       assigns(:beers).should eq [beer]
     end
+
+    context 'brewery_id specified' do
+      it 'assigns all beers associated with the brewery to @beers' do
+        brewery = FactoryGirl.create(:brewery)
+        beer_in_brewery = FactoryGirl.create(:beer, {brewery: brewery})
+        FactoryGirl.create(:beer, {brewery: FactoryGirl.build(:brewery)})
+        get :index, {brewery_id: brewery.id}
+        assigns(:beers).should eq [beer_in_brewery]
+      end
+    end
+
+    context 'in_stock filter set' do
+      it 'assigns all beers that have inventory > 0 to @beers' do
+        beer_with_inventory = FactoryGirl.create(:beer, {inventory: 1})
+        FactoryGirl.create(:beer, {inventory: 0})
+        get :index, {in_stock: 1}
+        assigns(:beers).should eq [beer_with_inventory]
+      end
+    end
   end
 
   describe 'GET show' do
@@ -287,5 +306,4 @@ describe BeersController do
       should redirect_to beers_url
     end
   end
-
 end
