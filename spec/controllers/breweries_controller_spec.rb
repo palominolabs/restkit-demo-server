@@ -6,18 +6,37 @@ describe BreweriesController do
   end
 
   describe 'GET index' do
-    before do
-      @brewery = Brewery.create! @valid_attributes
-    end
-
     it 'does not require authentication' do
       controller.should_not_receive :require_authentication
       get :index, {}
     end
 
     it 'assigns all breweries as @breweries' do
+      brewery = Brewery.create! @valid_attributes
       get :index, {}
-      assigns(:breweries).should eq([@brewery])
+      assigns(:breweries).should eq([brewery])
+    end
+
+    context 'supports paging' do
+      it 'returns specified page of breweries' do
+        Brewery.paginates_per(1)
+        brewery_a = FactoryGirl.create(:brewery, {name: 'a'})
+        brewery_b = FactoryGirl.create(:brewery, {name: 'b'})
+        get :index, {page: 1}
+        assigns(:breweries).should eq [brewery_a]
+        get :index, {page: 2}
+        assigns(:breweries).should eq [brewery_b]
+        get :index, {page: 3}
+        assigns(:breweries).should eq []
+      end
+
+      it 'sets metadata for total_count and page' do
+        FactoryGirl.create(:brewery)
+        FactoryGirl.create(:brewery)
+        FactoryGirl.create(:brewery)
+        controller.should_receive(:respond_with).with(anything(), {meta: {total_count: 3, page: 1}})
+        get :index
+      end
     end
   end
 

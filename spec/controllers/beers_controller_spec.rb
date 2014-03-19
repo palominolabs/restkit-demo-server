@@ -32,6 +32,28 @@ describe BeersController do
         assigns(:beers).should eq [beer_with_inventory]
       end
     end
+
+    context 'supports paging' do
+      it 'returns specified page of beers' do
+        Beer.paginates_per(1)
+        beer_a = FactoryGirl.create(:beer, {name: 'a'})
+        beer_b = FactoryGirl.create(:beer, {name: 'b'})
+        get :index, {page: 1}
+        assigns(:beers).should eq [beer_a]
+        get :index, {page: 2}
+        assigns(:beers).should eq [beer_b]
+        get :index, {page: 3}
+        assigns(:beers).should eq []
+      end
+
+      it 'sets metadata for total_count and page' do
+        FactoryGirl.create(:beer)
+        FactoryGirl.create(:beer)
+        FactoryGirl.create(:beer)
+        controller.should_receive(:respond_with).with(anything(), {meta: {total_count: 3, page: 1}})
+        get :index
+      end
+    end
   end
 
   describe 'GET show' do

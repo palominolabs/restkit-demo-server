@@ -7,17 +7,17 @@ class BeersController < ApplicationController
   # GET /beers
   def index
     if params[:brewery_id]
-      brewery = Brewery.find(params[:brewery_id])
-      @beers = brewery.beers.order(sort_column + ' ' + sort_direction)
+      beers = Beer.where(brewery_id: params[:brewery_id])
     else
-      @beers = Beer.order(sort_column + ' ' + sort_direction)
+      beers = Beer.all
     end
 
     if params[:in_stock] == '1'
-      @beers.where!('inventory > 0')
+      beers.where!('inventory > 0')
     end
 
-    respond_with @beers
+    @beers = beers.order(sort_column + ' ' + sort_direction).page(params[:page])
+    respond_with @beers, meta: {total_count: beers.length, page: params[:page] || 1}
   end
 
   # GET /beers/1

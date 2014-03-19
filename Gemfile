@@ -33,6 +33,9 @@ end
 # Use ActiveModel has_secure_password
 gem 'bcrypt-ruby', '~> 3.1.2'
 
+# Use Kaminari for paging
+gem 'kaminari'
+
 # Use unicorn as the app server
 # gem 'unicorn'
 

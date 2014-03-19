@@ -4,8 +4,8 @@ class ActivitiesController < ApplicationController
 
   # GET /events
   def index
-    @activities = Activity.all
-    respond_with @activities
+    @activities = Activity.all.order(created_at: :desc).page(params[:page])
+    respond_with @activities, meta: {total_count: Activity.all.length, page: params[:page] || 1}
   end
 
   # GET /show/1
