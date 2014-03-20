@@ -11,7 +11,11 @@
     <tbody>
     <% @beers.each do |beer| %>
         <tr>
-            <td><%= beer.name</td>
+            <td><%= beer.name %></td>
+            <td><%= beer.brewery.name %></td>
+            <td><%= beer.inventory %></td>
+            <td><%= beer.average_rating || 'Not Rated' %></td>
         </tr>
+    <% end %>
     </tbody>
 </table>

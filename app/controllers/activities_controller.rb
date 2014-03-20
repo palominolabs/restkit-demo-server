@@ -4,7 +4,13 @@ class ActivitiesController < ApplicationController
 
   # GET /events
   def index
-    @activities = Activity.all.order(created_at: :desc).page(params[:page])
+    activities = Activity.all.order(created_at: :desc)
+
+    if params[:type]
+      activities.where!(type: params[:type])
+    end
+
+    @activities = activities.page(params[:page])
     respond_with @activities, meta: {total_count: Activity.all.length, page: params[:page] || 1}
   end
 

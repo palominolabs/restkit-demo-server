@@ -34,6 +34,16 @@ describe ActivitiesController do
         get :index
       end
     end
+
+    context 'supports filtering by type' do
+      it 'assigns @activities only the activities of the specified type' do
+        beer_opened_activity = FactoryGirl.create(:beer_opened_activity)
+        FactoryGirl.create(:beer_added_activity)
+        FactoryGirl.create(:beer_reviewed_activity)
+        get :index, {type: 'BeerOpenedActivity'}
+        assigns(:activities).should eq [beer_opened_activity]
+      end
+    end
   end
 
   describe 'GET show' do
