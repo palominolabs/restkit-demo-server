@@ -6,6 +6,9 @@ describe Beer do
   it { should belong_to :brewery }
   it { should have_many(:reviews).dependent :destroy }
   it { should have_many(:reviewers) }
+  it { should validate_presence_of :inventory }
+  it { should validate_numericality_of(:inventory).is_greater_than_or_equal_to(0).only_integer }
+  it { should have_many(:beer_opened_activities).dependent :destroy }
 
   describe '#average_rating' do
     it 'should return the average rating for the given beer' do

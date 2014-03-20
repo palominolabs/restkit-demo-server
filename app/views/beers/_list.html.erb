@@ -4,6 +4,7 @@
         <th><%= sortable 'name' %></th>
         <th>Brewery</th>
         <th>Average Rating</th>
+        <th>Inventory</th>
         <% if current_user %>
             <th></th>
         <% end %>
@@ -16,18 +17,21 @@
             <td><%= link_to beer.name, beer %></td>
             <td><%= link_to beer.brewery.name, beer.brewery %></td>
             <td><%= beer.average_rating || 'Not Rated' %></td>
+            <td><%= beer.inventory %></td>
             <% if current_user %>
                 <td>
                     <%= link_to beer, method: :delete, data: {confirm: 'Are you sure?'},
                                 class: 'btn btn-default pull-right', style: 'margin-left: 5px' do %>
                         <span class='glyphicon glyphicon-remove'></span>
                     <% end %>
-                    <%= link_to edit_beer_path(beer), class: 'btn btn-default pull-right' do %>
+                    <%= link_to edit_beer_path(beer), class: 'btn btn-default pull-right', style: 'margin-left: 5px' do %>
                         <span class='glyphicon glyphicon-pencil'></span>
                     <% end %>
+                    <%= link_to 'Open', open_beer_path(beer), class: 'btn btn-default pull-right' %>
                 </td>
             <% end %>
         </tr>
     <% end %>
     </tbody>
 </table>
+<%= paginate @beers %>

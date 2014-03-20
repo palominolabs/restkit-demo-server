@@ -31,6 +31,12 @@ describe ReviewsController do
         assigns(:review).should be_persisted
       end
 
+      it 'creates a BeerReviewedActivity' do
+        post :create, review: @valid_attributes
+        assigns(:review).beer_reviewed_activities.length.should be 1
+        assigns(:review).beer_reviewed_activities.first.should be_a BeerReviewedActivity
+      end
+
       it 'redirects to the associated beer' do
         post :create, review: @valid_attributes
         should redirect_to @beer

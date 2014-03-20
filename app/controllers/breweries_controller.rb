@@ -6,12 +6,15 @@ class BreweriesController < ApplicationController
   # GET /breweries
   # GET /breweries.json
   def index
-    @breweries = Brewery.order(sort_column + ' ' + sort_direction)
+    @breweries = Brewery.order(sort_column + ' ' + sort_direction).page params[:page]
+
+    respond_with @breweries, meta: {total_count: Brewery.all.length, page: params[:page] || 1}
   end
 
   # GET /breweries/1
   # GET /breweries/1.json
   def show
+    respond_with @brewery
   end
 
   # GET /breweries/new

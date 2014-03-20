@@ -13,6 +13,47 @@ describe BeersController do
       get :index, {}
       assigns(:beers).should eq [beer]
     end
+
+    context 'brewery_id specified' do
+      it 'assigns all beers associated with the brewery to @beers' do
+        brewery = FactoryGirl.create(:brewery)
+        beer_in_brewery = FactoryGirl.create(:beer, {brewery: brewery})
+        FactoryGirl.create(:beer, {brewery: FactoryGirl.build(:brewery)})
+        get :index, {brewery_id: brewery.id}
+        assigns(:beers).should eq [beer_in_brewery]
+      end
+    end
+
+    context 'in_stock filter set' do
+      it 'assigns all beers that have inventory > 0 to @beers' do
+        beer_with_inventory = FactoryGirl.create(:beer, {inventory: 1})
+        FactoryGirl.create(:beer, {inventory: 0})
+        get :index, {in_stock: 1}
+        assigns(:beers).should eq [beer_with_inventory]
+      end
+    end
+
+    context 'supports paging' do
+      it 'returns specified page of beers' do
+        Beer.paginates_per(1)
+        beer_a = FactoryGirl.create(:beer, {name: 'a'})
+        beer_b = FactoryGirl.create(:beer, {name: 'b'})
+        get :index, {page: 1}
+        assigns(:beers).should eq [beer_a]
+        get :index, {page: 2}
+        assigns(:beers).should eq [beer_b]
+        get :index, {page: 3}
+        assigns(:beers).should eq []
+      end
+
+      it 'sets metadata for total_count and page' do
+        FactoryGirl.create(:beer)
+        FactoryGirl.create(:beer)
+        FactoryGirl.create(:beer)
+        controller.should_receive(:respond_with).with(anything(), {meta: {total_count: 3, page: 1}})
+        get :index
+      end
+    end
   end
 
   describe 'GET show' do
@@ -70,6 +111,8 @@ describe BeersController do
 
     context 'with valid params' do
       before do
+        user = FactoryGirl.build(:user)
+        controller.stub(:current_user).and_return(user)
         controller.stub(:require_authentication)
         brewery = FactoryGirl.create(:brewery)
         @beer_attributes = FactoryGirl.attributes_for(:beer, {brewery: brewery, brewery_id: brewery.id})
@@ -87,9 +130,23 @@ describe BeersController do
         assigns(:beer).should be_persisted
       end
 
+      it 'creates a beer_added_activity' do
+        post :create, {beer: @beer_attributes}
+        assigns(:beer).beer_added_activities.length.should eql 1
+        assigns(:beer).beer_added_activities.first.should be_a BeerAddedActivity
+      end
+
       it 'redirects to the created beer' do
         post :create, {beer: @beer_attributes}
         should redirect_to Beer.last
+      end
+
+      context 'with invalid beer_added_activity' do
+        it 're-renders the \'new\' template' do
+          controller.stub(:current_user).and_return(nil)
+          post :create, {beer: @beer_attributes}
+          should render_template :new
+        end
       end
     end
 
@@ -166,6 +223,90 @@ describe BeersController do
     end
   end
 
+  describe 'GET open' do
+    before do
+      @beer = FactoryGirl.create(:beer)
+    end
+    it 'requires authentication' do
+      controller.should_receive :require_authentication
+      get :open, {id: @beer.to_param, beer: @beer}
+    end
+
+    context 'with authorized user' do
+      before do
+        controller.stub(:require_authentication)
+        user = FactoryGirl.build(:user)
+        controller.stub(:current_user).and_return(user)
+      end
+
+      it 'assigns @beer to the specified beer' do
+        get :open, {id: @beer.id, beer: @beer}
+        assigns(:beer).should be_a Beer
+        assigns(:beer).name.should eql @beer.name
+      end
+
+      it 'assigns  @review to a new review' do
+        get :open, {id: @beer.id, beer: @beer}
+        assigns(:review).should be_new_record
+      end
+
+      it 'renders beers#show' do
+        get :open, {id: @beer.id, beer: @beer}
+        should redirect_to(@beer)
+      end
+
+      context 'with one or more beers in the inventory' do
+        before do
+          @beer = FactoryGirl.create(:beer, {name: 'test_beer', inventory: 2})
+        end
+
+        it 'decrements the inventory' do
+          get :open, {id: @beer.id, beer: @beer}
+          assigns(:beer).inventory.should eql 1
+        end
+
+        it 'creates a beer_opened_activity' do
+          get :open, {id: @beer.id, beer: @beer}
+          assigns(:beer).beer_opened_activities.length.should eql 1
+          assigns(:beer).beer_opened_activities.first.should be_a BeerOpenedActivity
+        end
+
+        it 'flashes a notice' do
+          get :open, {id: @beer.id, beer: @beer}
+          should set_the_flash[:notice].to 'A bottle of test_beer was successfully opened.'
+        end
+
+        context 'with invalid parameters' do
+          it 'flashes a failure alert' do
+            Beer.any_instance.stub(:save).and_return(false)
+            get :open, {id: @beer.id, beer: @beer}
+            should set_the_flash[:alert].to 'Failed to open a bottle of test_beer.'
+          end
+        end
+      end
+
+      context 'with zero beers in the inventory' do
+        before do
+          @beer = FactoryGirl.create(:beer, {name: 'test_beer', inventory: 0})
+        end
+
+        it 'flashes an alert' do
+          get :open, {id: @beer.id, beer: @beer}
+          should set_the_flash[:alert].to 'No bottles of test_beer left to open.'
+        end
+      end
+
+      context 'with invalid beer_opened_activity' do
+        it 'flashes an alert' do
+          controller.stub(:current_user).and_return(nil)
+          @beer = FactoryGirl.create(:beer, {name: 'test_beer', inventory: 2})
+          get :open, {id: @beer.id, beer: @beer}
+          should set_the_flash[:alert].to 'Failed to open a bottle of test_beer.'
+        end
+      end
+    end
+  end
+
   describe 'DELETE destroy' do
     it 'requires authentication' do
       controller.should_receive :require_authentication
@@ -187,5 +328,4 @@ describe BeersController do
       should redirect_to beers_url
     end
   end
-
 end
