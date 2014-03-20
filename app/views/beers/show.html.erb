@@ -21,11 +21,11 @@
             <h4>Rating <span class="label label-default"><%= @beer.average_rating || 'Not Rated' %></span></h4>
         </div>
     </div>
-    <div class="row text-center" style="padding-top:15px;border-top:1px solid #ccc;">
-        <% if current_user %>
-            <%= link_to 'Open a bottle', :open_beer, class: 'btn btn-primary' %>
-        <% end %>
-    </div>
+    <% if current_user && @beer.inventory != 0 %>
+        <div class="row text-center" style="padding-top:15px;border-top:1px solid #ccc;">
+            <%= link_to 'Open a Bottle', :open_beer, class: 'btn btn-primary' %>
+        </div>
+    <% end %>
 </div>
 <div class="row">
     <div class='col-sm-12'>

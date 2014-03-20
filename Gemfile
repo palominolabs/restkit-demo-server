@@ -35,6 +35,7 @@ gem 'bcrypt-ruby', '~> 3.1.2'
 
 # Use Kaminari for paging
 gem 'kaminari'
+gem 'kaminari-bootstrap', '~> 3.0.1'
 
 # Use unicorn as the app server
 # gem 'unicorn'
