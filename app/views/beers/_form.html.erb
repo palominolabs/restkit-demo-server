@@ -33,9 +33,9 @@
             </div>
         </div>
         <div class='form-group'>
-            <%= f.label :inventory_count, class: 'col-sm-3 control-label' %>
+            <%= f.label :inventory_count, "Inventory Count", class: 'col-sm-3 control-label' %>
             <div class='col-sm-8'>
-                <%= f.text_field :inventory, class: 'form-control', value: (@beer.inventory || 0) %>
+                <%= f.number_field :inventory, class: 'form-control', value: (@beer.inventory || 0) %>
             </div>
         </div>
         <div class='form-group'>

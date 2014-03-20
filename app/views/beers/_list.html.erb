@@ -21,13 +21,13 @@
             <% if current_user %>
                 <td>
                     <%= link_to beer, method: :delete, data: {confirm: 'Are you sure?'},
-                                class: 'btn btn-default pull-right', style: 'margin-left: 5px' do %>
+                                class: 'btn btn-danger  btn-xs pull-right', style: 'margin-left: 5px' do %>
                         <span class='glyphicon glyphicon-remove'></span>
                     <% end %>
-                    <%= link_to edit_beer_path(beer), class: 'btn btn-default pull-right', style: 'margin-left: 5px' do %>
+                    <%= link_to edit_beer_path(beer), class: 'btn btn-default btn-xs pull-right', style: 'margin-left: 5px' do %>
                         <span class='glyphicon glyphicon-pencil'></span>
                     <% end %>
-                    <%= link_to 'Open', open_beer_path(beer), class: 'btn btn-default pull-right' %>
+                    <%= link_to 'Open Bottle', open_beer_path(beer), class: 'btn btn-primary btn-xs pull-right' %>
                 </td>
             <% end %>
         </tr>

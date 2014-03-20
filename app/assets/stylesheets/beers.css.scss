@@ -12,11 +12,11 @@
 }
 
 .beer-avg-rating {
-  @extend .badge;
-  margin-bottom: 5px;
+  @extend .label;
+  @extend .label-default;
 }
 
 .beer-title-row {
   @extend .row;
-  margin-top: 20px;
+  margin: 20px 0;
 }

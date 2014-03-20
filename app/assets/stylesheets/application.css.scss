@@ -20,8 +20,12 @@
   margin-bottom: 5px;
 }
 
-body {
-  padding-top: 50px;
+.navbar-brand {
+  color: #fff !important;
+}
+
+.navbar-nav li:first-of-type, .navbar-nav li:last-of-type {
+  border-left: 3px solid #3C3C3C;
 }
 
 .new-form {
