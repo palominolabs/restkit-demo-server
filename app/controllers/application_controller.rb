@@ -5,11 +5,20 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
   respond_to :html, :json
   before_action :require_authentication
+  before_action :set_view_path_for_format
 
   def require_authentication
     unless current_user
       flash[:error] = 'You must be logged in to access this section.'
       redirect_to log_in_url
+    end
+  end
+
+  def set_view_path_for_format
+    if request.format == :html
+      prepend_view_path 'app/views/admin'
+    else
+      prepend_view_path 'app/views/widget'
     end
   end
 

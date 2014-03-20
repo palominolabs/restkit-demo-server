@@ -1,6 +1,12 @@
 <div class="row">
     <div class="col-xs-12">
-        <h1>Beers</h1>
+        <h1>
+            <%= "#{@brewery.name} " if @brewery %>
+            Beers
+            <% if @in_stock %>
+                <small> in the office</small>
+            <% end %>
+        </h1>
 
         <%= render 'list' %>
 
@@ -17,7 +23,7 @@
         <% if @in_stock %>
             <%= link_to 'See All Beers', all_path, class: 'btn btn-primary' %>
         <% else %>
-            <%= link_to 'What\'s In Stock', in_stock_path, class: 'btn btn-primary' %>
+            <%= link_to 'See Office Inventory', in_stock_path, class: 'btn btn-primary' %>
         <% end %>
 
         <% if current_user %>
