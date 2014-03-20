@@ -15,21 +15,35 @@ describe BeersController do
     end
 
     context 'brewery_id specified' do
-      it 'assigns all beers associated with the brewery to @beers' do
-        brewery = FactoryGirl.create(:brewery)
-        beer_in_brewery = FactoryGirl.create(:beer, {brewery: brewery})
+      before do
+        @brewery = FactoryGirl.create(:brewery)
+        @beer_in_brewery = FactoryGirl.create(:beer, {brewery: @brewery})
         FactoryGirl.create(:beer, {brewery: FactoryGirl.build(:brewery)})
-        get :index, {brewery_id: brewery.id}
-        assigns(:beers).should eq [beer_in_brewery]
+        get :index, {brewery_id: @brewery.id}
+      end
+
+      it 'assigns @brewery to the specified brewery' do
+        assigns(:brewery).should eq @brewery
+      end
+
+      it 'assigns all beers associated with the brewery to @beers' do
+        assigns(:beers).should eq [@beer_in_brewery]
       end
     end
 
     context 'in_stock filter set' do
-      it 'assigns all beers that have inventory > 0 to @beers' do
-        beer_with_inventory = FactoryGirl.create(:beer, {inventory: 1})
+      before do
+        @beer_with_inventory = FactoryGirl.create(:beer, {inventory: 1})
         FactoryGirl.create(:beer, {inventory: 0})
         get :index, {in_stock: 1}
-        assigns(:beers).should eq [beer_with_inventory]
+      end
+
+      it 'assigns all beers that have inventory > 0 to @beers' do
+        assigns(:beers).should eq [@beer_with_inventory]
+      end
+
+      it 'assigns @in_stock to the string 1' do
+        assigns(:in_stock).should eq '1'
       end
     end
 
