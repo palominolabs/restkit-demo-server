@@ -8,8 +8,6 @@
             <% end %>
         </h1>
 
-        <%= render 'list' %>
-
         <%
            if @brewery
              all_path = brewery_beers_path(@brewery)
@@ -20,11 +18,17 @@
            end
         %>
 
+        <div class="well well-small">
+            
         <% if @in_stock %>
-            <%= link_to 'See All Beers', all_path, class: 'btn btn-primary' %>
+            Viewing only beers in stock &middot; <%= link_to 'See all beers', all_path %>
         <% else %>
-            <%= link_to 'See Office Inventory', in_stock_path, class: 'btn btn-primary' %>
+            Viewing all beers &middot; <%= link_to 'See only what\'s in stock', in_stock_path %>
         <% end %>
+
+        </div>
+
+        <%= render 'list' %>
 
         <% if current_user %>
             <%= link_to '+ Add Beer', new_beer_path, class: 'btn btn-primary' %>
