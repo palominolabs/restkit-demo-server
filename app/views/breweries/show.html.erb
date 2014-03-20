@@ -1,6 +1,6 @@
 <h1 class='beer-title'><%= @brewery.name %></h1>
 
-<%= link_to 'View Beers', beer_path(@brewery) %>
+<%= link_to 'Their Beers', brewery_beers_path(@brewery) %>
 <% if current_user %>
     | <%= link_to 'Edit', edit_brewery_path(@brewery) %>
 <% end %>

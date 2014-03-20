@@ -7,12 +7,14 @@ class BeersController < ApplicationController
   # GET /beers
   def index
     if params[:brewery_id]
-      beers = Beer.where(brewery_id: params[:brewery_id])
+      @brewery = Brewery.find(params[:brewery_id])
+      beers = Beer.where(brewery: @brewery)
     else
       beers = Beer.all
     end
 
     if params[:in_stock] == '1'
+      @in_stock = '1'
       beers.where!('inventory > 0')
     end
 
