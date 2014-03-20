@@ -1,1 +1,17 @@
-hello world
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Brewery</th>
+        <th>Inventory</th>
+        <th>Average Rating</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <% @beers.each do |beer| %>
+        <tr>
+            <td><%= beer.name</td>
+        </tr>
+    </tbody>
+</table>
