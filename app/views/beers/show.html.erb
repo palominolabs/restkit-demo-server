@@ -1,45 +1,36 @@
-<div class='beer-title-row hidden-xs'>
-    <div class="col-sm-12">
-        <h1 class='beer-title'><%= @beer.name %></h1>
-        <h1 class='beer-title'><small> by <%= link_to @beer.brewery.name, @beer.brewery %></small></h1>
-        <span class='beer-avg-rating'><%= @beer.average_rating || 'Not Rated' %></span>
-    </div>
-</div>
-<div class='beer-title-row visible-xs'>
-    <div class="col-xs-12">
-        <h1 class='beer-title'><%= @beer.name %></h1>
-    </div>
-    <div class="col-xs-12">
-        <h1 class='beer-title'><small> by <%= @beer.brewery.name %></small></h1>
-    </div>
-    <div class="col-xs-12">
-        <span class='beer-avg-rating'><%= @beer.average_rating || 'Not Rated' %></span>
-    </div>
+<div class='beer-title-row'>
+    <h1 class='beer-title'>
+        <%= @beer.name %> 
+        <small>by <%= link_to @beer.brewery.name, @beer.brewery %></small>
+        <% if current_user %>
+            <%= link_to edit_beer_path(@beer), class: 'btn btn-default btn-sm' do %>
+                <span class='glyphicon glyphicon-pencil'></span> Edit
+            <% end %>
+        <% end %>
+    </h1>
 </div>
 
-<div class='row'>
-    <div class='col-sm-12'>
-        <h4>Inventory Count: <small><strong><%= @beer.inventory %></strong></small></h4>
+<div class='well'>
+    <div class="row">
+        <div class="col-sm-6">
+            <h4>
+                Inventory Count <span class="label label-default"><%= @beer.inventory %></span>
+            </h4>
+        </div>
+        <div class="col-sm-6" style="border-left: 1px solid #ccc;">
+            <h4>Rating <span class="label label-default"><%= @beer.average_rating || 'Not Rated' %></span></h4>
+        </div>
     </div>
-</div>
-<div class='row'>
-    <div class='col-sm-12'>
-        <%= link_to beers_path, class: 'btn btn-default' do %>
-            <span class='glyphicon glyphicon-arrow-left'></span>
-        <% end %>
+    <div class="row text-center" style="padding-top:15px;border-top:1px solid #ccc;">
         <% if current_user %>
-            <%= link_to edit_beer_path(@beer), class: 'btn btn-default' do %>
-                <span class='glyphicon glyphicon-pencil'></span>
-            <% end %>
-            <%= link_to 'Open a bottle', :open_beer, class: 'btn btn-default' %>
+            <%= link_to 'Open a bottle', :open_beer, class: 'btn btn-primary' %>
         <% end %>
     </div>
 </div>
-<br>
 <div class="row">
     <div class='col-sm-12'>
         <% if @beer.reviews.length > 0 %>
-            <h3>Reviews</h3>
+            <h4><strong>Reviews</strong></h4>
             <%= render @beer.reviews %>
         <% end %>
 

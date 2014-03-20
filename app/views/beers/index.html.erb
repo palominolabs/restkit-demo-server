@@ -4,9 +4,24 @@
 
         <%= render 'list' %>
 
-        <br>
+        <%
+           if @brewery
+             all_path = brewery_beers_path(@brewery)
+             in_stock_path = brewery_beers_path(@brewery, in_stock: '1')
+           else
+             all_path = beers_path
+             in_stock_path = beers_path(in_stock: '1')
+           end
+        %>
+
+        <% if @in_stock %>
+            <%= link_to 'See All Beers', all_path, class: 'btn btn-primary' %>
+        <% else %>
+            <%= link_to 'What\'s In Stock', in_stock_path, class: 'btn btn-primary' %>
+        <% end %>
+
         <% if current_user %>
-            <%= link_to 'New Beer', new_beer_path, class: 'btn btn-default' %>
+            <%= link_to '+ Add Beer', new_beer_path, class: 'btn btn-primary' %>
         <% end %>
         <br>
     </div>

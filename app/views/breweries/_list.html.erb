@@ -19,10 +19,10 @@
             <% if current_user %>
                 <td>
                     <%= link_to brewery, method: :delete, data: {confirm: 'Are you sure?'},
-                                class: 'btn btn-default pull-right', style: 'margin-left: 5px' do %>
+                                class: 'btn btn-danger btn-xs pull-right', style: 'margin-left: 5px' do %>
                         <span class='glyphicon glyphicon-remove'></span>
                     <% end %>
-                    <%= link_to edit_brewery_path(brewery), class: 'btn btn-default pull-right' do %>
+                    <%= link_to edit_brewery_path(brewery), class: 'btn btn-default btn-xs pull-right' do %>
                         <span class='glyphicon glyphicon-pencil'></span>
                     <% end %>
                 </td>

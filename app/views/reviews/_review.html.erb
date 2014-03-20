@@ -1,6 +1,6 @@
-<div class='panel panel-default'>
-    <div class='panel-heading'>
-        <h3 class='panel-title'><%= review.user.name %> <span class='badge pull-right'><%= review.rating %></span></h3>
+<div class='panel panel-success'>
+    <div class='panel-heading' style="overflow:auto">
+        <h3 class='panel-title pull-left'><%= review.user.name %></h3> <span class='pull-right'>Rating <span class='label label-default'><%= review.rating %></span></span></h3>
     </div>
     <% if ((review.comment and review.comment.length > 0) or current_user == review.user) %>
         <div class='panel-body'>
@@ -8,7 +8,7 @@
             <% if current_user == review.user %>
                 <%= link_to review, method: :delete,
                             data: {confirm: 'Are you sure?'},
-                            class: 'btn btn-default pull-right' do %>
+                            class: 'btn btn-danger btn-xs pull-right' do %>
                     <span class='glyphicon glyphicon-remove'></span>
                 <% end %>
             <% end %>
