@@ -27,7 +27,10 @@
                     <%= link_to edit_beer_path(beer), class: 'btn btn-default btn-xs pull-right', style: 'margin-left: 5px' do %>
                         <span class='glyphicon glyphicon-pencil'></span>
                     <% end %>
-                    <%= link_to 'Open Bottle', open_beer_path(beer), class: 'btn btn-primary btn-xs pull-right' %>
+                    <% if beer.inventory != 0 %>
+                        <%= link_to 'Open Bottle', open_beer_path(beer), class: 'btn btn-primary btn-xs pull-right' %>
+                    <% end %>
+
                 </td>
             <% end %>
         </tr>

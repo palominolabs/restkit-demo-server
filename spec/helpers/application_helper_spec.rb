@@ -35,11 +35,11 @@ describe BeersHelper do
 
   describe '#current_sort_class' do
     it 'returns down arrow glyph for desc sort' do
-      helper.current_sort_class('desc').should eql 'glyphicon glyphicon-arrow-down'
+      helper.current_sort_class('desc').should eql 'glyphicon glyphicon-chevron-down'
     end
 
     it 'returns up arrow glyph for asc sort' do
-      helper.current_sort_class('asc').should eql 'glyphicon glyphicon-arrow-up'
+      helper.current_sort_class('asc').should eql 'glyphicon glyphicon-chevron-up'
     end
   end
 end
