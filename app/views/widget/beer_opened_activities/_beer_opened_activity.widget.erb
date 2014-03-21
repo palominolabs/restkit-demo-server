@@ -1,3 +1,4 @@
-<div>
-    <%= beer_opened_activity.beer.name %> was opened by <%= beer_opened_activity.user.name %>!
+<div class="activity-item">
+    <%= image_tag 'activity-open.png' %>
+    <strong><%= beer_opened_activity.beer.name %></strong> from <strong><%= beer_opened_activity.beer.brewery.name %></strong> was opened
 </div>

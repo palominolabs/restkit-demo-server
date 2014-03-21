@@ -1,2 +1,4 @@
-<div>
-    <%= beer_reviewed_activity.review.user.name %> rated <%= beer_reviewed_activity.review.beer.name %> a <%= beer_reviewed_activity.review.rating %> out of 5!</div>
+<div class="activity-item">
+    <%= image_tag 'activity-rating.png' %>
+    <strong><%= beer_reviewed_activity.review.user.name %></strong> rated <strong><%= beer_reviewed_activity.review.beer.name %></strong> a <strong><%= beer_reviewed_activity.review.rating %> out of 5</strong>
+</div>
