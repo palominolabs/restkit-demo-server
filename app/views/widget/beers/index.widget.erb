@@ -1,19 +1,17 @@
-<table>
+<table class="list-table">
     <thead>
     <tr>
-        <th>Name</th>
+        <th>Beer Name</th>
         <th>Brewery</th>
-        <th>Inventory</th>
-        <th>Average Rating</th>
+        <th>Avg. Rating</th>
     </tr>
     </thead>
 
     <tbody>
-    <% @beers.each do |beer| %>
+    <% @beers.where('inventory > ?', 0).each do |beer| %>
         <tr>
             <td><%= beer.name %></td>
             <td><%= beer.brewery.name %></td>
-            <td><%= beer.inventory %></td>
             <td><%= beer.average_rating || 'Not Rated' %></td>
         </tr>
     <% end %>
