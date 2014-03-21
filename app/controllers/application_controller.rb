@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_access_control
-    headers['X-Frame-Options'] = 'ALLOW-FROM localhost:3000'
+    headers['X-Frame-Options'] = Configuration.x_frame_option_uri
   end
 
   protected

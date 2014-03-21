@@ -79,6 +79,6 @@ PLReviews::Application.configure do
   config.log_formatter = ::Logger::Formatter.new
 
   config.after_initialize do
-    Configuration.x_frame_option_uri = 'ALLOW-FROM palominolabs.com'
+    Configuration.x_frame_option_uri = 'ALLOW-FROM localhost:3000'
   end
 end
