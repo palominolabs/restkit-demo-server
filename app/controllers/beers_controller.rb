@@ -44,7 +44,23 @@ class BeersController < ApplicationController
     @beer.beer_added_activities << BeerAddedActivity.new(beer: @beer, user: current_user)
 
     if @beer.save
-      redirect_to @beer, notice: 'Beer was successfully created.'
+      thumbnail = params[:beer][:thumbnail]
+      if thumbnail
+        image_url = upload_s3_image(thumbnail)
+        if image_url
+          @beer.image_url = image_url.to_s
+          if @beer.save
+            redirect_to @beer, notice: 'Beer was successfully created.'
+          else
+            flash.now.alert = 'Failed to save image, please try again'
+            render action: 'edit'
+          end
+        else
+          render action: 'edit'
+        end
+      else
+        redirect_to @beer, notice: 'Beer was successfully created.'
+      end
     else
       render action: 'new'
     end
@@ -53,7 +69,23 @@ class BeersController < ApplicationController
   # PATCH/PUT /beers/1
   def update
     if @beer.update(beer_params)
-      redirect_to @beer, notice: 'Beer was successfully updated.'
+      thumbnail = params[:beer][:thumbnail]
+      if thumbnail
+        image_url = upload_s3_image(thumbnail)
+        if image_url
+          @beer.image_url = image_url.to_s
+          if @beer.save
+            redirect_to @beer, notice: 'Beer was successfully updated.'
+          else
+            flash.now.alert = 'Failed to save image, please try again'
+            render action: 'edit'
+          end
+        else
+          render action: 'edit'
+        end
+      else
+        redirect_to @beer, notice: 'Beer was successfully updated.'
+      end
     else
       render action: 'edit'
     end
@@ -105,5 +137,28 @@ class BeersController < ApplicationController
 
   def sort_direction
     %w[asc desc].include?(params[:direction]) ? params[:direction] : 'asc'
+  end
+
+  def upload_s3_image(image)
+    if image
+      if ['image/jpeg', 'image/png'].include?(image.content_type)
+        s3 = AWS::S3.new
+        bucket = s3.buckets["pl-reviews-images-#{Rails.env}"]
+        s3_image = bucket.objects.create("beer-thumb-#{@beer.id}", image)
+
+        if s3_image && s3_image.public_url
+          s3_image.public_url
+        else
+          flash.now.alert 'Failed to upload image'
+          nil
+        end
+      else
+        flash.now.alert 'Invalid Format: Only JPEGs and PNGs are supported'
+        nil
+      end
+    else
+      flash.now.alert 'No image provided'
+      nil
+    end
   end
 end

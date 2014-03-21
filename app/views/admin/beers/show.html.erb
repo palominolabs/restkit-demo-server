@@ -1,4 +1,5 @@
 <div class='beer-title-row'>
+    <%= image_tag @beer.image_url || 'placeholder.png', class: 'beer-thumbnail' %>
     <h1 class='beer-title'>
         <%= @beer.name %> 
         <small>by <%= link_to @beer.brewery.name, @beer.brewery %></small>

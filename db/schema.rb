@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140318233755) do
+ActiveRecord::Schema.define(version: 20140321225419) do
 
   create_table "activities", force: true do |t|
     t.string   "type"
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 20140318233755) do
     t.integer  "brewery_id"
     t.integer  "inventory"
     t.integer  "reviews_count"
+    t.string   "image_url"
   end
 
   add_index "beers", ["brewery_id"], name: "index_beers_on_brewery_id"
