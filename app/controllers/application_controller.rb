@@ -22,6 +22,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def set_access_control
+    headers['X-Frame-Options'] = 'ALLOW-FROM localhost:3000'
+  end
+
   protected
   def current_user
     @current_user ||= User.find(session[:user_id]) if session[:user_id]

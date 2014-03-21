@@ -1,6 +1,7 @@
 class ActivitiesController < ApplicationController
   skip_before_action :require_authentication, only: [:index, :show]
   before_action :set_activity, only: [:show]
+  after_filter :set_access_control, only: [:index]
 
   # GET /events
   def index

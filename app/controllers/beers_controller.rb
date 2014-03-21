@@ -2,6 +2,7 @@ class BeersController < ApplicationController
   skip_before_action :require_authentication, only: [:index, :show]
   before_action :set_beer, only: [:show, :edit, :update, :destroy, :open]
   before_action :set_breweries, only: [:new, :edit, :create, :update]
+  after_filter :set_access_control, only: [:index]
   helper_method :sort_column, :sort_direction
 
   # GET /beers
