@@ -37,6 +37,9 @@ gem 'bcrypt-ruby', '~> 3.1.2'
 gem 'kaminari'
 gem 'kaminari-bootstrap', '~> 3.0.1'
 
+# Use AWS_SDK for communicating with S3
+gem 'aws-sdk'
+
 # Use unicorn as the app server
 # gem 'unicorn'
 
