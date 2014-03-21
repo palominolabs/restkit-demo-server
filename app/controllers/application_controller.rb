@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_access_control
-    headers['X-Frame-Options'] = Configuration.x_frame_option_uri
+    headers['X-Frame-Options'] = HEADER_URI_CONFIG['x_frame_option_uri']
   end
 
   protected

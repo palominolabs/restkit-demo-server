@@ -26,8 +26,4 @@ PLReviews::Application.configure do
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
   config.assets.debug = true
-
-  config.after_initialize do
-    Configuration.x_frame_option_uri = 'ALLOW-FROM localhost:3000'
-  end
 end

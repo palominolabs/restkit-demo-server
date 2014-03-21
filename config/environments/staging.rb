@@ -77,8 +77,4 @@ PLReviews::Application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
-
-  config.after_initialize do
-    Configuration.x_frame_option_uri = 'ALLOW-FROM localhost:3000'
-  end
 end
