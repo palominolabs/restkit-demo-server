@@ -32,133 +32,130 @@ class BeersController < ApplicationController
   # GET /beers/new
   def new
     @beer = Beer.new
+    @beer_form = BeerForm.new
   end
 
   # GET /beers/1/edit
   def edit
+    @beer_form = BeerForm.new({
+        name: @beer.name,
+        brewery_id: @beer.brewery_id,
+        inventory: @beer.inventory
+                              })
   end
 
   # POST /beers
   def create
-    @beer = Beer.new(beer_params)
-    @beer.beer_added_activities << BeerAddedActivity.new(beer: @beer, user: current_user)
+    @beer_form = BeerForm.new(beer_form_params)
+    if @beer_form.valid?
+      @beer = Beer.new({
+                           name: @beer_form.name,
+                           brewery_id: @beer_form.brewery_id,
+                           inventory: @beer_form.inventory
+                       })
+      @beer.beer_added_activities << BeerAddedActivity.new(beer: @beer, user: current_user)
 
-    if @beer.save
-      thumbnail = params[:beer][:thumbnail]
-      if thumbnail
-        image_url = upload_s3_image(thumbnail)
-        if image_url
-          @beer.image_url = image_url.to_s
-          if @beer.save
-            redirect_to @beer, notice: 'Beer was successfully created.'
+      if @beer.save
+        if @beer_form.thumbnail
+          if upload_s3_image(@beer_form.thumbnail, @beer)
+            redirect_to @beer, notice: 'Beer was successfully created.' and return
           else
-            flash.now.alert = 'Failed to save image, please try again'
-            render action: 'edit'
+            render action: :edit and return
           end
         else
-          render action: 'edit'
+          redirect_to @beer, notice: 'Beer was successfully created.' and return
         end
-      else
-        redirect_to @beer, notice: 'Beer was successfully created.'
       end
-    else
-      render action: 'new'
     end
+    render action: :new
   end
 
   # PATCH/PUT /beers/1
   def update
-    if @beer.update(beer_params)
-      thumbnail = params[:beer][:thumbnail]
-      if thumbnail
-        image_url = upload_s3_image(thumbnail)
-        if image_url
-          @beer.image_url = image_url.to_s
-          if @beer.save
-            redirect_to @beer, notice: 'Beer was successfully updated.'
-          else
-            flash.now.alert = 'Failed to save image, please try again'
-            render action: 'edit'
-          end
-        else
-          render action: 'edit'
-        end
-      else
-        redirect_to @beer, notice: 'Beer was successfully updated.'
-      end
-    else
-      render action: 'edit'
-    end
-  end
+    @beer_form = BeerForm.new(beer_form_params)
+    if @beer_form.valid?
+      @beer = Beer.find(params[:id])
 
-  # DELETE /beers/1
-  def destroy
-    @beer.destroy
-    redirect_to beers_url
-  end
-
-  # GET OPEN /beer/1/open
-  def open
-    if @beer.inventory > 0
-      @beer.decrement(:inventory)
-      @beer.beer_opened_activities << BeerOpenedActivity.new(user: current_user)
+      @beer.name = @beer_form.name
+      @beer.brewery_id = @beer_form.brewery_id
+      @beer.inventory = @beer_form.inventory
 
       if @beer.save
-        flash.notice = "A bottle of #{@beer.name} was successfully opened."
-      else
-        flash.alert = "Failed to open a bottle of #{@beer.name}."
+        if @beer_form.thumbnail
+          if upload_s3_image(@beer_form.thumbnail, @beer)
+            redirect_to @beer, notice: 'Beer was successfully updated.' and return
+          end
+        else
+          redirect_to @beer, notice: 'Beer was successfully updated.' and return
+        end
       end
-    else
-      flash.alert = "No bottles of #{@beer.name} left to open."
+    end
+    render action: :edit
+  end
+
+    # DELETE /beers/1
+    def destroy
+      @beer.destroy
+      redirect_to beers_url
     end
 
-    @review = Review.new
-    redirect_to @beer
-  end
+    # GET OPEN /beer/1/open
+    def open
+      if @beer.inventory > 0
+        @beer.decrement(:inventory)
+        @beer.beer_opened_activities << BeerOpenedActivity.new(user: current_user)
 
-  private
-  # Use callbacks to share common setup or constraints between actions.
-  def set_beer
-    @beer = Beer.find(params[:id])
-  end
-
-  def set_breweries
-    @breweries = Brewery.order(:name)
-  end
-
-  # Never trust parameters from the scary internet, only allow the white list through.
-  def beer_params
-    params.require(:beer).permit(:name, :brewery_id, :inventory)
-  end
-
-  def sort_column
-    Beer.column_names.include?(params[:sort]) ? params[:sort] : 'name'
-  end
-
-  def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : 'asc'
-  end
-
-  def upload_s3_image(image)
-    if image
-      if ['image/jpeg', 'image/png'].include?(image.content_type)
-        s3 = AWS::S3.new
-        bucket = s3.buckets["pl-reviews-images-#{Rails.env}"]
-        s3_image = bucket.objects.create("beer-thumb-#{@beer.id}", image)
-
-        if s3_image && s3_image.public_url
-          s3_image.public_url
+        if @beer.save
+          flash.notice = "A bottle of #{@beer.name} was successfully opened."
         else
-          flash.now.alert 'Failed to upload image'
-          nil
+          flash.alert = "Failed to open a bottle of #{@beer.name}."
         end
       else
-        flash.now.alert 'Invalid Format: Only JPEGs and PNGs are supported'
-        nil
+        flash.alert = "No bottles of #{@beer.name} left to open."
       end
-    else
-      flash.now.alert 'No image provided'
-      nil
+
+      @review = Review.new
+      redirect_to @beer
+    end
+
+    private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_beer
+      @beer = Beer.find(params[:id])
+    end
+
+    def set_breweries
+      @breweries = Brewery.order(:name)
+    end
+
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def beer_form_params
+      params.require(:beer_form).permit(:name, :brewery_id, :inventory, :thumbnail)
+    end
+
+    def sort_column
+      Beer.column_names.include?(params[:sort]) ? params[:sort] : 'name'
+    end
+
+    def sort_direction
+      %w[asc desc].include?(params[:direction]) ? params[:direction] : 'asc'
+    end
+
+    def upload_s3_image(image, beer)
+      begin
+        image_url = AwsService.upload_beer_image(image, beer)
+        beer.image_url = image_url.to_s
+        unless beer.save
+          flash.now.alert = 'Failed to save image, please try again'
+          image_url = nil
+        end
+      rescue AwsService::ImageUploadFailed => e
+        flash.now.alert 'Failed to upload image'
+      rescue AwsService::InvalidImageFormat => e
+        flash.now.alert 'Invalid Format: Only JPEGs and PNGs are supported'
+      rescue AwsService::NoImageProvided => e
+        flash.now.alert 'No image provided'
+      end
+      image_url
     end
   end
-end
