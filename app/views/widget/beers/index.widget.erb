@@ -6,13 +6,13 @@
         <div class="activity-item">
             <strong><%= beer.name %></strong> from <strong><%= beer.brewery.name %></strong>
         </div>
-        <% if index == 5 && @beers.count > 6 %>
+        <% if index == 6 && @beers.count > 7 %>
             <div class="activity-item" id="showHidden">
                 <a href="#">And <%= @beers.count - (index + 1) %> more</a>
             </div>
-            <div class="hidden" id="hiddenBeers">
+            <div class="hidden" id="hiddenItems">
         <% end %>
-        <% if beer == @beers.last && index > 5 %>
+        <% if beer == @beers.last && index > 6 && @beers.count > 7 %>
             </div> <!-- /.hidden -->
         <% end %>
     <% end %>
