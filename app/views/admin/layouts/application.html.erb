@@ -22,7 +22,7 @@
         </div>
         <div class='collapse navbar-collapse'>
             <ul class='nav navbar-nav pull-right'>
-                <li class="<%= 'active' if current_page?(beers_path) %>"><%= link_to 'Beers', beers_path %></li>
+                <li class="<%= 'active' if current_page?(beers_path) || current_page?(root_path) %>"><%= link_to 'Beers', beers_path %></li>
                 <li class="<%= 'active' if current_page?(breweries_path) %>"><%= link_to 'Breweries', breweries_path %></li>
                 <li class="<%= 'active' if current_page?(activities_path) %>"><%= link_to 'Activities', activities_path %></li>
                 <% if current_user %>
