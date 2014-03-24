@@ -2,6 +2,10 @@
 // They will automatically be included in application.css.scss.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.beers-list td:last-of-type {
+    min-width: 150px;
+}
+
 .beer-index-current {
   font-weight: bold;
 }
