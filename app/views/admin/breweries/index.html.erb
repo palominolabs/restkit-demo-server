@@ -1,13 +1,13 @@
 <div class="row">
     <div class="col-xs-12">
-        <h1>Breweries</h1>
+        <h1>
+            All Breweries 
+            <% if current_user %>
+                <%= link_to '+ Add Brewery', new_brewery_path, class: 'btn btn-primary pull-right' %>
+            <% end %>
+        </h1>
 
         <%= render 'list' %>
-
-        <br>
-        <% if current_user %>
-            <%= link_to '+ Add Brewery', new_brewery_path, class: 'btn btn-primary' %>
-        <% end %>
         <br>
     </div>
 </div>

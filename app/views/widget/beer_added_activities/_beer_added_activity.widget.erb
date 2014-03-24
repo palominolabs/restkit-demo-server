@@ -1,3 +1,4 @@
-<div>
-    <%= beer_added_activity.beer.name %> was added by <%= beer_added_activity.user.name %>!
+<div class="activity-item">
+    <%= image_tag 'activity-add.png' %>
+    <strong><%= beer_added_activity.beer.name %></strong> from <strong><%= beer_added_activity.beer.brewery.name %></strong> was added to the inventory
 </div>

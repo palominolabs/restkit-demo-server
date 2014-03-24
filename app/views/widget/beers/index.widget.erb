@@ -1,21 +1,18 @@
-<table>
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Brewery</th>
-        <th>Inventory</th>
-        <th>Average Rating</th>
-    </tr>
-    </thead>
+<div class="section-title">
+    <%= @beers.count %> different beers <%= 'currently in stock' if @in_stock == '1' %>
+</div>
 
-    <tbody>
-    <% @beers.each do |beer| %>
-        <tr>
-            <td><%= beer.name %></td>
-            <td><%= beer.brewery.name %></td>
-            <td><%= beer.inventory %></td>
-            <td><%= beer.average_rating || 'Not Rated' %></td>
-        </tr>
+    <% @beers.each_with_index do |beer, index| %>
+        <div class="activity-item">
+            <strong><%= beer.name %></strong> from <strong><%= beer.brewery.name %></strong>
+        </div>
+        <% if index == 5 && @beers.count > 6 %>
+            <div class="activity-item" id="showHidden">
+                <a href="#">And <%= @beers.count - (index + 1) %> more</a>
+            </div>
+            <div class="hidden" id="hiddenBeers">
+        <% end %>
+        <% if beer == @beers.last && index > 5 %>
+            </div> <!-- /.hidden -->
+        <% end %>
     <% end %>
-    </tbody>
-</table>

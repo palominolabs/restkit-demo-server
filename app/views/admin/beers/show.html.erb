@@ -3,8 +3,8 @@
         <%= @beer.name %> 
         <small>by <%= link_to @beer.brewery.name, @beer.brewery %></small>
         <% if current_user %>
-            <%= link_to edit_beer_path(@beer), class: 'btn btn-default btn-sm' do %>
-                <span class='glyphicon glyphicon-pencil'></span> Edit
+            <%= link_to edit_beer_path(@beer), class: 'btn btn-default btn-xs' do %>
+                <span class='glyphicon glyphicon-pencil'></span> Edit Beer
             <% end %>
         <% end %>
     </h1>
