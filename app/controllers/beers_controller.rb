@@ -143,19 +143,15 @@ class BeersController < ApplicationController
 
     def upload_s3_image(image, beer)
       begin
-        image_url = AwsService.upload_beer_image(image, beer)
-        beer.image_url = image_url.to_s
-        unless beer.save
-          flash.now.alert = 'Failed to save image, please try again'
-          image_url = nil
-        end
+        AwsService.upload_beer_image(image, beer)
+      rescue AwsService::BeerSaveFailed => e
+        flash.now.alert = 'Failed to save image, please try again'
       rescue AwsService::ImageUploadFailed => e
-        flash.now.alert 'Failed to upload image'
+        flash.now.alert = 'Failed to upload image'
       rescue AwsService::InvalidImageFormat => e
-        flash.now.alert 'Invalid Format: Only JPEGs and PNGs are supported'
+        flash.now.alert = 'Invalid Format: Only JPEGs and PNGs are supported'
       rescue AwsService::NoImageProvided => e
-        flash.now.alert 'No image provided'
+        flash.now.alert = 'No image provided'
       end
-      image_url
     end
   end

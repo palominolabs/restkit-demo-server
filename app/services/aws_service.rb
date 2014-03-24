@@ -12,6 +12,9 @@ module AwsService
   class NoImageProvided < RuntimeError
   end
 
+  class BeerSaveFailed < RuntimeError
+  end
+
   class << self
     def upload_beer_image(image, beer)
       if image
@@ -21,7 +24,12 @@ module AwsService
           s3_image = bucket.objects.create(BASE_BEER_IMAGE_NAME + beer.id.to_s, image)
 
           if s3_image && s3_image.public_url
-            s3_image.public_url
+            beer.image_url = s3_image.public_url
+            if beer.save
+              s3_image.public_url
+            else
+              raise BeerSaveFailed
+            end
           else
             raise ImageUploadFailed
           end
