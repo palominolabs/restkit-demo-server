@@ -18,3 +18,5 @@
 # intelliJ files
 .idea/
 pl-reviews.iml
+
+.DS_Store
