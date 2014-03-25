@@ -16,6 +16,7 @@ describe AwsService do
 
     context 'image upload fails' do
       before do
+        RmagickService.should_receive(:resize_image).with(anything, 50, 50).and_return(double(content_type: 'image/png'))
         bucket = double('bucket', objects: double('objects', :create => double(public_url: false)))
         buckets = {'pl-reviews-images-test' => bucket}
         AWS::S3.should_receive(:new).and_return(double('s3', buckets: buckets))
@@ -28,6 +29,7 @@ describe AwsService do
 
     context 'image upload succeeds' do
       before do
+        RmagickService.should_receive(:resize_image).with(anything, 50, 50).and_return(double(content_type: 'image/png'))
         bucket = double('bucket', objects: double('objects', create: double('create', public_url: 'test_url')))
         buckets = {'pl-reviews-images-test' => bucket}
         AWS::S3.should_receive(:new).and_return(double('s3', buckets: buckets))
