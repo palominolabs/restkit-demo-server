@@ -194,6 +194,12 @@ describe BeersController do
           post :create, {beer_form: @beer_form_attributes}
           should render_template :new
         end
+
+        it 'assigns @beers a new beer' do
+          controller.stub(:current_user).and_return(nil)
+          post :create, {beer_form: @beer_form_attributes}
+          assigns(:beer).should be_a_new Beer
+        end
       end
     end
 

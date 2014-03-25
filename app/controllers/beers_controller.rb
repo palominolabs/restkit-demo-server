@@ -67,6 +67,7 @@ class BeersController < ApplicationController
         end
       end
     end
+    @beer = Beer.new
     render action: :new
   end
 
@@ -74,7 +75,6 @@ class BeersController < ApplicationController
   def update
     @beer_form = BeerForm.new(beer_form_params)
     if @beer_form.valid?
-      @beer = Beer.find(params[:id])
 
       @beer.name = @beer_form.name
       @beer.brewery_id = @beer_form.brewery_id
