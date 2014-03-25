@@ -2,6 +2,6 @@
     <%= @brewery.name %>
     <%= link_to 'View Their Beers'.html_safe, brewery_beers_path(@brewery), class: 'btn btn-primary btn-xs' %>
     <% if current_user %>
-        <%= link_to 'Edit Brewery', edit_brewery_path(@brewery), class: 'btn btn-default btn-xs' %>
+        <%= link_to '<span class=\'glyphicon glyphicon-pencil\'></span>  Edit Brewery'.html_safe, edit_brewery_path(@brewery), class: 'btn btn-default btn-xs' %>
     <% end %>
 </h1>
