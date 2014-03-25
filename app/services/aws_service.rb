@@ -4,8 +4,8 @@ module AwsService
   ACCEPTED_FORMATS = [JPEG_FORMAT, PNG_FORMAT]
   IMAGE_BUCKET_NAME = "pl-reviews-images-#{Rails.env}"
   BASE_BEER_IMAGE_NAME = 'beer-thumb-'
-  MAX_WIDTH = 50
-  MAX_HEIGHT = 50
+  MAX_WIDTH = 500
+  MAX_HEIGHT = 500
 
   class ImageUploadFailed < RuntimeError
   end
