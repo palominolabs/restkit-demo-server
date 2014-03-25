@@ -40,6 +40,9 @@ gem 'kaminari-bootstrap', '~> 3.0.1'
 # Use AWS_SDK for communicating with S3
 gem 'aws-sdk'
 
+# Use RMagik for image manipulation
+gem 'rmagick', '2.13.2'
+
 # Use unicorn as the app server
 # gem 'unicorn'
 
