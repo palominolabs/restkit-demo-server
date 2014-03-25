@@ -27,6 +27,7 @@
   width: 20px;
   height: 20px;
   margin-bottom: 5px;
+  margin-right: 5px;
 }
 
 .navbar-brand {
@@ -44,6 +45,10 @@
 .flash-message {
   margin-top: 10px;
   margin-bottom: 0px;
+}
+
+.panel-success {
+  background: #F5FFF4;
 }
 
 @import '*';
