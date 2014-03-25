@@ -41,7 +41,7 @@ gem 'kaminari-bootstrap', '~> 3.0.1'
 gem 'aws-sdk'
 
 # Use RMagik for image manipulation
-gem 'rmagick', '2.13.2'
+gem 'rmagick', '2.13.2', :require => 'RMagick'
 
 # Use unicorn as the app server
 # gem 'unicorn'
