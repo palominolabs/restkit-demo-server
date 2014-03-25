@@ -1,9 +1,21 @@
 <div class='new-form'>
-    <%= form_for(@beer_form, url: beers_url, html: {class: 'form-horizontal'}) do |f| %>
+    <%
+       if @beer.persisted?
+         form_url = beer_url(@beer)
+         form_method = 'PUT'
+         submit_text = 'Update Beer'
+       else
+         form_url = beers_url
+         form_method = 'POST'
+         submit_text = 'Create Beer'
+       end
+    %>
+    <%= form_for(@beer_form, url: form_url, method: form_method, html: {class: 'form-horizontal'}) do |f| %>
         <% if @beer_form.errors.any? %>
             <div class='panel panel-danger'>
                 <div class='panel-heading'>
-                    <h4 class='panel-title'><%= pluralize(@beer_form.errors.count, 'error') %> prohibited this beer from being saved</h4>
+                    <h4 class='panel-title'><%= pluralize(@beer_form.errors.count, 'error') %> prohibited this beer from
+                        being saved</h4>
                 </div>
                 <div class='panel-body'>
                     <ul>
@@ -25,7 +37,8 @@
             <%= f.label :brewery, class: 'col-sm-3 control-label' %>
             <div class='col-sm-8'>
                 <% if @breweries.length > 0 %>
-                    <%= f.select :brewery_id, options_from_collection_for_select(@breweries, :id, :name, (@beer.brewery) ? @beer.brewery.id : nil), class: 'form-control' %> or
+                    <%= f.select :brewery_id, options_from_collection_for_select(@breweries, :id, :name, (@beer.brewery) ? @beer.brewery.id : nil), class: 'form-control' %>
+                    or
                 <% end %>
                 <p class="form-control-static">
                     <%= link_to 'Add a new brewery', new_brewery_path %>
@@ -50,7 +63,7 @@
 
         <div class='form-group'>
             <div class='col-sm-offset-3 col-sm-8'>
-                <%= f.submit class: 'btn btn-primary'%>
+                <%= f.submit submit_text, class: 'btn btn-primary' %>
             </div>
         </div>
     <% end %>
