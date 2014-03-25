@@ -1,5 +1,4 @@
 <div class='beer-title-row'>
-    <%= image_tag @beer.image_url || 'placeholder.png', class: 'beer-thumbnail' %>
     <h1 class='beer-title'>
         <%= @beer.name %> 
         <small>by <%= link_to @beer.brewery.name, @beer.brewery %></small>
@@ -15,10 +14,14 @@
 </div>
 
 <hr>
-<h4>
+<div class="beer-info">
     <span class="label label-default">Inventory Count: <%= @beer.inventory %></span>
     <span class="label label-success">Average Rating: <%= @beer.average_rating || 'Not Rated' %></span>
-</h4>
+    <a href="#" class="btn btn-default pull-right" id="beer-image-button" data-toggle="modal" data-target="#beer-image-modal">
+        View Image
+        <%= image_tag @beer.image_url || 'placeholder.png', class: 'beer-thumbnail' %>
+    </a>
+</div>
 <hr>
 
 <div class="row">
@@ -31,5 +34,15 @@
         <% if current_user %>
             <%= render 'reviews/form' %>
         <% end %>
+    </div>
+</div>
+
+<div class="modal fade" id="beer-image-modal" tabindex="-1" role="dialog" aria-labelledby="beer-image-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body text-center">
+            <%= image_tag @beer.image_url || 'placeholder.png' %>
+          </div>
+        </div>
     </div>
 </div>
