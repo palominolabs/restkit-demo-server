@@ -1,0 +1,11 @@
+development:
+  x_frame_option_uri: 'ALLOW-FROM localhost:3000'
+
+test:
+  x_frame_option_uri: 'ALLOW-FROM localhost:3000'
+
+staging:
+  x_frame_option_uri: 'ALLOW-FROM localhost:3000'
+
+production:
+  x_frame_option_uri: 'ALLOW-FROM palominolabs.com'

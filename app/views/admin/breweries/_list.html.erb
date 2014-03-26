@@ -1,0 +1,35 @@
+<table class='table table-striped'>
+    <thead>
+    <tr class="info">
+        <th><%= sortable 'name' %></th>
+        <th><%= sortable 'beers_count', 'No. of Beers' %></th>
+        <th><%= 'Average Rating' %></th>
+        <% if current_user %>
+            <th></th>
+        <% end %>
+    </tr>
+    </thead>
+
+    <tbody>
+    <% @breweries.each do |brewery| %>
+        <tr>
+            <td><%= link_to brewery.name, brewery %></td>
+            <td><%= link_to brewery.beers_count || 0, brewery_beers_path(brewery.id) %></td>
+            <td><%= brewery.average_rating || 'Not Rated' %></td>
+            <% if current_user %>
+                <td>
+                    <%= link_to brewery, method: :delete, data: {confirm: 'Are you sure?'},
+                                class: 'btn btn-danger btn-xs pull-right', style: 'margin-left: 5px' do %>
+                        <span class='glyphicon glyphicon-remove'></span>
+                    <% end %>
+                    <%= link_to edit_brewery_path(brewery), class: 'btn btn-default btn-xs pull-right' do %>
+                        <span class='glyphicon glyphicon-pencil'></span>
+                    <% end %>
+                </td>
+            <% end %>
+        </tr>
+    <% end %>
+    </tbody>
+</table>
+<%= paginate @breweries %>
+<br>

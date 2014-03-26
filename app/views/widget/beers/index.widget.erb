@@ -1,0 +1,18 @@
+<div class="section-title">
+    <%= @beers.count %> different beers <%= 'currently in stock' if @in_stock == '1' %>
+</div>
+
+    <% @beers.each_with_index do |beer, index| %>
+        <div class="activity-item">
+            <strong><%= beer.name %></strong> from <strong><%= beer.brewery.name %></strong>
+        </div>
+        <% if index == 6 && @beers.count > 7 %>
+            <div class="activity-item" id="showHidden">
+                <a href="#">And <%= @beers.count - (index + 1) %> more</a>
+            </div>
+            <div class="hidden" id="hiddenItems">
+        <% end %>
+        <% if beer == @beers.last && index > 6 && @beers.count > 7 %>
+            </div> <!-- /.hidden -->
+        <% end %>
+    <% end %>

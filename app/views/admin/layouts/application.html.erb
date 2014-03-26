@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Palomino Labs &middot; Beer Reviews</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <%= csrf_meta_tags %>
+</head>
+<body>
+
+<div class='navbar navbar-inverse navbar-static-top' role='navigation'>
+    <div class='container'>
+        <div class='navbar-header'>
+            <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'>
+                <span class='sr-only'>Toggle navigation</span>
+                <span class='icon-bar'></span>
+                <span class='icon-bar'></span>
+                <span class='icon-bar'></span>
+            </button>
+            <a class='navbar-brand' href='/'><%= image_tag 'icon_white_bg_transparent.png', id: 'logo' %> Palomino Labs &middot; Beer Reviews</a>
+        </div>
+        <div class='collapse navbar-collapse'>
+            <ul class='nav navbar-nav pull-right'>
+                <li class="<%= 'active' if current_page?(beers_path) || current_page?(root_path) %>"><%= link_to 'Beers', beers_path %></li>
+                <li class="<%= 'active' if current_page?(breweries_path) %>"><%= link_to 'Breweries', breweries_path %></li>
+                <li class="<%= 'active' if current_page?(activities_path) %>"><%= link_to 'Activities', activities_path %></li>
+                <% if current_user %>
+                    <li><%= link_to 'Log out', log_out_path %></li>
+                <% else %>
+                    <li><%= link_to 'Log in', log_in_path %></li>
+                <% end %>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</div>
+
+<div class='plr-container'>
+    <% flash.each do |key, value| %>
+        <div class='flash-message <%= flash_class(key) %>'>
+            <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+            <%= value %>
+        </div>
+    <% end %>
+
+    <%= yield %>
+</div>
+
+</body>
+</html>

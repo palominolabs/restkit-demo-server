@@ -14,14 +14,28 @@
 @import 'bootstrap/theme';
 @import 'font-awesome';
 
+.container {
+  max-width: 800px;
+}
+
+.plr-container {
+  @extend .container;
+  margin-bottom: 20px;
+}
+
 #logo {
   width: 20px;
   height: 20px;
   margin-bottom: 5px;
+  margin-right: 5px;
 }
 
-body {
-  padding-top: 50px;
+.navbar-brand {
+  color: #fff !important;
+}
+
+.navbar-nav li:first-of-type, .navbar-nav li:last-of-type {
+  border-left: 3px solid #3C3C3C;
 }
 
 .new-form {
@@ -33,11 +47,8 @@ body {
   margin-bottom: 0px;
 }
 
-/* Customize container */
-@media (min-width: 768px) {
-  .container {
-    max-width: 730px;
-  }
+.panel-success {
+  background: #F5FFF4;
 }
 
 @import '*';

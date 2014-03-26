@@ -1,0 +1,17 @@
+<div class="section-title">
+    Beer activity feed
+</div>
+<% @activities.each_with_index do |activity, index| %>
+    <%= render activity %>
+
+    <% if index == 6 && @activities.count > 7 %>
+        <div class="activity-item" id="showHidden">
+            <a href="#">And <%= @activities.count - (index + 1) %> more</a>
+        </div>
+        <div class="hidden" id="hiddenItems">
+    <% end %>
+    <% if activity == @activities.last && index > 6 && @activities.count > 7 %>
+        </div> <!-- /.hidden -->
+    <% end %>
+
+<% end %>

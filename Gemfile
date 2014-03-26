@@ -22,9 +22,9 @@ gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jquery-turbolinks'
 
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 1.2'
-
+# Active Model Serializer for structuring JSON responses
+gem 'active_model_serializers', git: 'https://github.com/rails-api/active_model_serializers.git'
+ 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
@@ -32,6 +32,16 @@ end
 
 # Use ActiveModel has_secure_password
 gem 'bcrypt-ruby', '~> 3.1.2'
+
+# Use Kaminari for paging
+gem 'kaminari'
+gem 'kaminari-bootstrap', '~> 3.0.1'
+
+# Use AWS_SDK for communicating with S3
+gem 'aws-sdk'
+
+# Use RMagik for image manipulation
+gem 'rmagick', '2.13.2', :require => 'RMagick'
 
 # Use unicorn as the app server
 # gem 'unicorn'
@@ -57,6 +67,6 @@ group :test do
   gem 'shoulda-matchers'
 end
 
-group :production do
+group :production, :staging do
   gem 'pg'
 end
