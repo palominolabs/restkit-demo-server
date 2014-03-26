@@ -21,3 +21,4 @@ pl-reviews.iml
 
 .DS_Store
 config/ss-aws.yml
+config/aws.yml
