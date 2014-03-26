@@ -1,4 +1,4 @@
-file = Rails.root.join('config', 'ss-aws.yml')
+file = Rails.root.join('config', 'aws.yml')
 
 # log requests using the default rails logger
 AWS.config(:logger => Rails.logger)

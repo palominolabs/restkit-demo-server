@@ -9,8 +9,6 @@ class ApplicationController < ActionController::Base
   def set_view_path_for_format
     if request.format == :html
       prepend_view_path 'app/views/admin'
-    else
-      prepend_view_path 'app/views/widget'
     end
   end
 
