@@ -19,7 +19,7 @@ module ApplicationHelper
     css_class = column == sort_column ? current_sort_class(sort_direction) : nil
     direction = column == sort_column && sort_direction == 'asc' ? 'desc' : 'asc'
     link_to({sort: column, direction: direction}) do
-      content_tag(:div, title, style: 'display: inline;') +
+      content_tag(:div, title << ' ', style: 'display: inline;') +
       if css_class
         content_tag(:span, nil, class: css_class)
       end
@@ -27,7 +27,7 @@ module ApplicationHelper
   end
 
   def current_sort_class(sort_direction)
-    (sort_direction == 'desc') ? 'glyphicon glyphicon-arrow-down' : 'glyphicon glyphicon-arrow-up'
+    (sort_direction == 'desc') ? 'glyphicon glyphicon-chevron-down' : 'glyphicon glyphicon-chevron-up'
   end
 
 end

@@ -1,0 +1,1 @@
+HEADER_URI_CONFIG = YAML.load_file("#{::Rails.root}/config/header_uri.yml")[::Rails.env]

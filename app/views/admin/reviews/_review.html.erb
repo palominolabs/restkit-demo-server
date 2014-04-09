@@ -1,0 +1,20 @@
+<div class='panel panel-success'>
+    <div class='panel-heading' style="overflow:auto">
+        <h3 class='panel-title pull-left'><%= review.user.name %></h3>
+        <% if current_user == review.user %>
+            <%= link_to review, method: :delete,
+                        data: {confirm: 'Are you sure?'},
+                        class: 'btn btn-danger btn-xs pull-right' do %>
+                <span class='glyphicon glyphicon-remove'></span>
+            <% end %>
+        <% end %>
+    </div>
+    <div class='panel-body'>
+        <p>
+            <span class='label label-success'>Rating: <%= review.rating %></span>
+        </p>
+        <p>
+            <%= review.comment %>
+        </p>
+    </div>
+</div>

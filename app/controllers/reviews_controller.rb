@@ -2,6 +2,7 @@ class ReviewsController < ApplicationController
   def create
     @review = Review.new(review_params)
     @review.user = current_user
+    @review.beer_reviewed_activities << BeerReviewedActivity.new(review: @review)
 
     if @review.save
       redirect_to @review.beer, notice: 'Review was successfully created.'

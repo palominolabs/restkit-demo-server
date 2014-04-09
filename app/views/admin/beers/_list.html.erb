@@ -1,0 +1,41 @@
+<table class="table table-striped beers-list">
+    <thead>
+    <tr class="info">
+        <th><%= sortable 'name' %></th>
+        <th>Brewery</th>
+        <th>Average Rating</th>
+        <th>Inventory</th>
+        <% if current_user %>
+            <th></th>
+        <% end %>
+    </tr>
+    </thead>
+
+    <tbody>
+    <% @beers.each do |beer| %>
+        <tr>
+            <td><%= link_to beer.name, beer %></td>
+            <td><%= link_to beer.brewery.name, beer.brewery %></td>
+            <td><%= beer.average_rating || 'Not Rated' %></td>
+            <td><%= beer.inventory %></td>
+            <% if current_user %>
+                <td>
+                    <%= link_to beer, method: :delete, data: {confirm: 'Are you sure?'},
+                                class: 'btn btn-danger  btn-xs pull-right', style: 'margin-left: 5px' do %>
+                        <span class='glyphicon glyphicon-remove'></span>
+                    <% end %>
+                    <%= link_to edit_beer_path(beer), class: 'btn btn-default btn-xs pull-right', style: 'margin-left: 5px' do %>
+                        <span class='glyphicon glyphicon-pencil'></span>
+                    <% end %>
+                    <% if beer.inventory != 0 %>
+                        <%= link_to 'Open Bottle', open_beer_path(beer), class: 'btn btn-primary btn-xs pull-right' %>
+                    <% end %>
+
+                </td>
+            <% end %>
+        </tr>
+    <% end %>
+    </tbody>
+</table>
+<%= paginate @beers %>
+<br>

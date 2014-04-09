@@ -1,0 +1,44 @@
+<div class='beer-title-row'>
+    <h1 class='beer-title'>
+        <%= @beer.name %> 
+        <small>by <%= link_to @beer.brewery.name, @beer.brewery %></small>
+        <% if current_user %>
+            <%= link_to edit_beer_path(@beer), class: 'btn btn-default btn-xs' do %>
+                <span class='glyphicon glyphicon-pencil'></span> Edit Beer
+            <% end %>
+            <% if @beer.inventory > 0 %>
+                <%= link_to 'Open a Bottle', :open_beer, class: 'btn btn-primary btn-xs' %>
+            <% end %>
+        <% end %>
+    </h1>
+</div>
+
+<hr>
+<div class="beer-info">
+    <span class="label label-default">Inventory Count: <%= @beer.inventory %></span>
+    <span class="label label-success">Average Rating: <%= @beer.average_rating || 'Not Rated' %></span>
+</div>
+<hr>
+
+<div class="row">
+    <div class='col-sm-12'>
+        <% if @beer.reviews.length > 0 %>
+            <h4><strong>Reviews</strong></h4>
+            <%= render @beer.reviews %>
+        <% end %>
+
+        <% if current_user %>
+            <%= render 'reviews/form' %>
+        <% end %>
+    </div>
+</div>
+
+<div class="modal fade" id="beer-image-modal" tabindex="-1" role="dialog" aria-labelledby="beer-image-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body text-center">
+            <%= image_tag @beer.image_url || 'placeholder.png' %>
+          </div>
+        </div>
+    </div>
+</div>

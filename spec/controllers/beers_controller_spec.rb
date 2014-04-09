@@ -13,6 +13,61 @@ describe BeersController do
       get :index, {}
       assigns(:beers).should eq [beer]
     end
+
+    context 'brewery_id specified' do
+      before do
+        @brewery = FactoryGirl.create(:brewery)
+        @beer_in_brewery = FactoryGirl.create(:beer, {brewery: @brewery})
+        FactoryGirl.create(:beer, {brewery: FactoryGirl.build(:brewery)})
+        get :index, {brewery_id: @brewery.id}
+      end
+
+      it 'assigns @brewery to the specified brewery' do
+        assigns(:brewery).should eq @brewery
+      end
+
+      it 'assigns all beers associated with the brewery to @beers' do
+        assigns(:beers).should eq [@beer_in_brewery]
+      end
+    end
+
+    context 'in_stock filter set' do
+      before do
+        @beer_with_inventory = FactoryGirl.create(:beer, {inventory: 1})
+        FactoryGirl.create(:beer, {inventory: 0})
+        get :index, {in_stock: 1}
+      end
+
+      it 'assigns all beers that have inventory > 0 to @beers' do
+        assigns(:beers).should eq [@beer_with_inventory]
+      end
+
+      it 'assigns @in_stock to the string 1' do
+        assigns(:in_stock).should eq '1'
+      end
+    end
+
+    context 'supports paging' do
+      it 'returns specified page of beers' do
+        Beer.paginates_per(1)
+        beer_a = FactoryGirl.create(:beer, {name: 'a'})
+        beer_b = FactoryGirl.create(:beer, {name: 'b'})
+        get :index, {page: 1}
+        assigns(:beers).should eq [beer_a]
+        get :index, {page: 2}
+        assigns(:beers).should eq [beer_b]
+        get :index, {page: 3}
+        assigns(:beers).should eq []
+      end
+
+      it 'sets metadata for total_count and page' do
+        FactoryGirl.create(:beer)
+        FactoryGirl.create(:beer)
+        FactoryGirl.create(:beer)
+        controller.should_receive(:respond_with).with(anything(), {meta: {total_count: 3, page: 1}})
+        get :index
+      end
+    end
   end
 
   describe 'GET show' do
@@ -65,31 +120,53 @@ describe BeersController do
   describe 'POST create' do
     it 'requires authentication' do
       controller.should_receive :require_authentication
-      post :create, { beer: FactoryGirl.attributes_for(:beer) }
+      post :create, { beer_form: FactoryGirl.attributes_for(:beer_form) }
     end
 
     context 'with valid params' do
       before do
+        user = FactoryGirl.build(:user)
+        controller.stub(:current_user).and_return(user)
         controller.stub(:require_authentication)
         brewery = FactoryGirl.create(:brewery)
-        @beer_attributes = FactoryGirl.attributes_for(:beer, {brewery: brewery, brewery_id: brewery.id})
+        @beer_form_attributes = FactoryGirl.attributes_for(:beer_form, {brewery_id: brewery.id})
       end
 
       it 'creates a new Beer' do
         expect {
-          post :create, {beer: @beer_attributes}
+          post :create, {beer_form: @beer_form_attributes}
         }.to change(Beer, :count).by 1
       end
 
       it 'assigns a newly created beer as @beer' do
-        post :create, {beer: @beer_attributes}
+        post :create, {beer_form: @beer_form_attributes}
         assigns(:beer).should be_a Beer
         assigns(:beer).should be_persisted
       end
 
+      it 'creates a beer_added_activity' do
+        post :create, {beer_form: @beer_form_attributes}
+        assigns(:beer).beer_added_activities.length.should eql 1
+        assigns(:beer).beer_added_activities.first.should be_a BeerAddedActivity
+      end
+
       it 'redirects to the created beer' do
-        post :create, {beer: @beer_attributes}
+        post :create, {beer_form: @beer_form_attributes}
         should redirect_to Beer.last
+      end
+
+      context 'with invalid beer_added_activity' do
+        it 're-renders the \'new\' template' do
+          controller.stub(:current_user).and_return(nil)
+          post :create, {beer_form: @beer_form_attributes}
+          should render_template :new
+        end
+
+        it 'assigns @beers a new beer' do
+          controller.stub(:current_user).and_return(nil)
+          post :create, {beer_form: @beer_form_attributes}
+          assigns(:beer).should be_a_new Beer
+        end
       end
     end
 
@@ -98,17 +175,17 @@ describe BeersController do
         controller.stub(:require_authentication)
       end
 
-      it 'assigns a newly created but unsaved beer as @beer' do
+      it 'assigns a newly created but unsaved beer_form as @beer_form' do
         # Trigger the behavior that occurs when invalid params are submitted
         Beer.any_instance.stub(:save).and_return(false)
-        post :create, {beer: { name: 'invalid value' }}
-        assigns(:beer).should be_a_new Beer
+        post :create, {beer_form: { name: 'invalid value' }}
+        assigns(:beer_form).should be_a BeerForm
       end
 
       it 're-renders the \'new\' template' do
         # Trigger the behavior that occurs when invalid params are submitted
         Beer.any_instance.stub(:save).and_return(false)
-        post :create, {beer: { name: 'invalid value' }}
+        post :create, {beer_form: { name: 'invalid value' }}
         should render_template :new
       end
     end
@@ -118,7 +195,7 @@ describe BeersController do
     it 'requires authentication' do
       @beer = FactoryGirl.create(:beer)
       controller.should_receive :require_authentication
-      put :update, {id: @beer.to_param, beer: FactoryGirl.attributes_for(:beer)}
+      put :update, {id: @beer.to_param, beer_form: FactoryGirl.attributes_for(:beer_form)}
     end
 
     context 'with valid params' do
@@ -128,18 +205,18 @@ describe BeersController do
       end
 
       it 'updates the requested beer' do
-        Beer.any_instance.should_receive(:update).with({ 'name' => 'Egregious' })
-        put :update, {id: @beer.to_param, beer: { name: 'Egregious' }}
+        Beer.any_instance.should_receive(:save)
+        put :update, {id: @beer.to_param, beer_form: FactoryGirl.attributes_for(:beer_form, { name: 'Egregious' })}
       end
 
       it 'assigns the requested beer as @beer' do
-        put :update, {id: @beer.to_param, beer: FactoryGirl.attributes_for(:beer)}
+        put :update, {id: @beer.to_param, beer_form: FactoryGirl.attributes_for(:beer_form)}
         assigns(:beer).should be_a Beer
         assigns(:beer).id.should eql @beer.id
       end
 
       it 'redirects to the beer' do
-        put :update, {id: @beer.to_param, beer: FactoryGirl.attributes_for(:beer)}
+        put :update, {id: @beer.to_param, beer_form: FactoryGirl.attributes_for(:beer_form)}
         should redirect_to @beer
       end
     end
@@ -153,14 +230,14 @@ describe BeersController do
       it 'assigns the beer as @beer' do
         # Trigger the behavior that occurs when invalid params are submitted
         Beer.any_instance.stub(:save).and_return(false)
-        put :update, {id: @beer.to_param, beer: { name: 'invalid value' }}
+        put :update, {id: @beer.to_param, beer_form: { name: 'invalid value' }}
         assigns(:beer).should eq @beer
       end
 
       it 're-renders the \'edit\' template' do
         # Trigger the behavior that occurs when invalid params are submitted
         Beer.any_instance.stub(:save).and_return(false)
-        put :update, {id: @beer.to_param, beer: { name: 'invalid value' }}
+        put :update, {id: @beer.to_param, beer_form: { name: 'invalid value' }}
         should render_template :edit
       end
     end
@@ -178,6 +255,8 @@ describe BeersController do
     context 'with authorized user' do
       before do
         controller.stub(:require_authentication)
+        user = FactoryGirl.build(:user)
+        controller.stub(:current_user).and_return(user)
       end
 
       it 'assigns @beer to the specified beer' do
@@ -193,7 +272,7 @@ describe BeersController do
 
       it 'renders beers#show' do
         get :open, {id: @beer.id, beer: @beer}
-        should render_template :show
+        should redirect_to(@beer)
       end
 
       context 'with one or more beers in the inventory' do
@@ -206,16 +285,22 @@ describe BeersController do
           assigns(:beer).inventory.should eql 1
         end
 
+        it 'creates a beer_opened_activity' do
+          get :open, {id: @beer.id, beer: @beer}
+          assigns(:beer).beer_opened_activities.length.should eql 1
+          assigns(:beer).beer_opened_activities.first.should be_a BeerOpenedActivity
+        end
+
         it 'flashes a notice' do
           get :open, {id: @beer.id, beer: @beer}
-          should set_the_flash[:notice].now.to 'A bottle of test_beer was successfully opened.'
+          should set_the_flash[:notice].to 'A bottle of test_beer was successfully opened.'
         end
 
         context 'with invalid parameters' do
           it 'flashes a failure alert' do
             Beer.any_instance.stub(:save).and_return(false)
             get :open, {id: @beer.id, beer: @beer}
-            should set_the_flash[:alert].now.to 'Failed to open a bottle of test_beer.'
+            should set_the_flash[:alert].to 'Failed to open a bottle of test_beer.'
           end
         end
       end
@@ -227,7 +312,16 @@ describe BeersController do
 
         it 'flashes an alert' do
           get :open, {id: @beer.id, beer: @beer}
-          should set_the_flash[:alert].now.to 'No bottles of test_beer left to open.'
+          should set_the_flash[:alert].to 'No bottles of test_beer left to open.'
+        end
+      end
+
+      context 'with invalid beer_opened_activity' do
+        it 'flashes an alert' do
+          controller.stub(:current_user).and_return(nil)
+          @beer = FactoryGirl.create(:beer, {name: 'test_beer', inventory: 2})
+          get :open, {id: @beer.id, beer: @beer}
+          should set_the_flash[:alert].to 'Failed to open a bottle of test_beer.'
         end
       end
     end
@@ -254,5 +348,4 @@ describe BeersController do
       should redirect_to beers_url
     end
   end
-
 end
