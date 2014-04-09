@@ -61,15 +61,7 @@ class BeersController < ApplicationController
           @beer.beer_added_activities << BeerAddedActivity.new(beer: @beer, user: current_user)
 
           if @beer.save
-            if @beer_form.thumbnail
-              if upload_s3_image(@beer_form.thumbnail, @beer)
-                redirect_to @beer, notice: 'Beer was successfully created.'
-              else
-                render action: :edit
-              end
-            else
-              redirect_to @beer, notice: 'Beer was successfully created.'
-            end
+            redirect_to @beer, notice: 'Beer was successfully created.'
           else
             @beer = Beer.new
             render action: :new
@@ -89,13 +81,7 @@ class BeersController < ApplicationController
           @beer.beer_added_activities << BeerAddedActivity.new(beer: @beer, user: current_user)
 
           if @beer.save
-            if @beer_form.thumbnail
-              if upload_s3_image(@beer_form.thumbnail, @beer)
-                render json: @beer
-              end
-            else
-              render json: @beer
-            end
+            render json: @beer
           else
             render nothing: true, status: 500
           end
@@ -116,13 +102,7 @@ class BeersController < ApplicationController
       @beer.inventory = @beer_form.inventory
 
       if @beer.save
-        if @beer_form.thumbnail
-          if upload_s3_image(@beer_form.thumbnail, @beer)
-            redirect_to @beer, notice: 'Beer was successfully updated.' and return
-          end
-        else
-          redirect_to @beer, notice: 'Beer was successfully updated.' and return
-        end
+        redirect_to @beer, notice: 'Beer was successfully updated.' and return
       end
     end
     render action: :edit
@@ -174,19 +154,5 @@ class BeersController < ApplicationController
 
   def sort_direction
     %w[asc desc].include?(params[:direction]) ? params[:direction] : 'asc'
-  end
-
-  def upload_s3_image(image, beer)
-    begin
-      AwsService.upload_beer_image(image, beer)
-    rescue AwsService::BeerSaveFailed => e
-      flash.now.alert = 'Failed to save image, please try again'
-    rescue AwsService::ImageUploadFailed => e
-      flash.now.alert = 'Failed to upload image'
-    rescue AwsService::InvalidImageFormat => e
-      flash.now.alert = 'Invalid Format: Only JPEGs and PNGs are supported'
-    rescue AwsService::NoImageProvided => e
-      flash.now.alert = 'No image provided'
-    end
   end
 end

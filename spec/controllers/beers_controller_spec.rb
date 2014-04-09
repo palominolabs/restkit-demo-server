@@ -155,39 +155,6 @@ describe BeersController do
         should redirect_to Beer.last
       end
 
-      context 'with thumbnail' do
-        it 'rescues AwsService::NoImageProvided and flashes message' do
-          AwsService.should_receive(:upload_beer_image).and_raise(AwsService::NoImageProvided)
-          post :create, beer_form: FactoryGirl.attributes_for(:beer_form, {thumbnail: :test_thumbnail})
-          should set_the_flash[:alert].now.to 'No image provided'
-        end
-
-        it 'rescues AwsService::InvalidImageFormat and flashes message' do
-          AwsService.should_receive(:upload_beer_image).and_raise(AwsService::InvalidImageFormat)
-          post :create, beer_form: FactoryGirl.attributes_for(:beer_form, {thumbnail: :test_thumbnail})
-          should set_the_flash[:alert].now.to 'Invalid Format: Only JPEGs and PNGs are supported'
-        end
-
-        it 'rescues AwsService::ImageUploadFailed and flashes message' do
-          AwsService.should_receive(:upload_beer_image).and_raise(AwsService::ImageUploadFailed)
-          post :create, beer_form: FactoryGirl.attributes_for(:beer_form, {thumbnail: :test_thumbnail})
-          should set_the_flash[:alert].now.to 'Failed to upload image'
-        end
-
-        it 'rescues AwsService::BeerSaveFailed and flashes message' do
-          AwsService.should_receive(:upload_beer_image).and_raise(AwsService::BeerSaveFailed)
-          post :create, beer_form: FactoryGirl.attributes_for(:beer_form, {thumbnail: :test_thumbnail})
-          should set_the_flash[:alert].now.to 'Failed to save image, please try again'
-        end
-
-        it 'redirects to @beer with notice' do
-          AwsService.should_receive(:upload_beer_image).and_return('test_image_url')
-          post :create, beer_form: FactoryGirl.attributes_for(:beer_form, {thumbnail: :test_thumbnail})
-          should set_the_flash[:notice].to 'Beer was successfully created.'
-          should redirect_to Beer.last
-        end
-      end
-
       context 'with invalid beer_added_activity' do
         it 're-renders the \'new\' template' do
           controller.stub(:current_user).and_return(nil)
